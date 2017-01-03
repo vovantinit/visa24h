@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+    
+        <record id="sky_result_multi_so_form" model="ir.ui.view">
+            <field name="name">sky_result_multi_so.form</field>
+            <field name="model">sky_result_multi_so</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="ketqua" />
+                    </group>
+                    <footer>
+                        <button name="submit" string="Xác nhận" type="object" class="oe_highlight" />
+                        or                        
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="sky_result_multi_so_action" model="ir.actions.act_window">
+            <field name="name">Result multi SO</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sky_result_multi_so</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sky_result_multi_so_form" />
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="sky_result_multi_so_values">
+            <field name="model_id" ref="model_sky_result_multi_so" />
+            <field name="name">Result multi SO</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('sky_result_multi_so_action'))" />
+            <field name="key">action</field>
+            <field name="model">sale.order</field>
+        </record>
+
+
+
+</data>
+</openerp>
