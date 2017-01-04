@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form>
                     <group>
-                        <field name="ketqua" />
+                        <field name="date_result" />
                     </group>
                     <footer>
                         <button name="submit" string="Xác nhận" type="object" class="oe_highlight" />
