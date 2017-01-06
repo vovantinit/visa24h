@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-04 02:16+0000\n"
-"PO-Revision-Date: 2017-01-04 02:16+0000\n"
+"POT-Creation-Date: 2017-01-06 18:19+0000\n"
+"PO-Revision-Date: 2017-01-06 18:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,16 @@ msgid "Cancel"
 msgstr "Hủy"
 
 #. module: sky_result_multi_sale_order
+#: field:sky_result_multi_so,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: sky_result_multi_sale_order
+#: field:sky_result_multi_so,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: sky_result_multi_sale_order
 #: field:sky_result_multi_so,date_result:0
 msgid "Date result"
 msgstr "Ngày tính doanh số"
@@ -31,15 +41,25 @@ msgid "ID"
 msgstr "ID"
 
 #. module: sky_result_multi_sale_order
+#: field:sky_result_multi_so,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: sky_result_multi_sale_order
+#: field:sky_result_multi_so,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: sky_result_multi_sale_order
 #: model:ir.actions.act_window,name:sky_result_multi_sale_order.sky_result_multi_so_action
-msgid "Result multi SO"
-msgstr "Trả kết quả"
+msgid "Result multi SO "
+msgstr "Tính doanh số"
 
 #. module: sky_result_multi_sale_order
 #: code:addons/sky_result_multi_sale_order/wizard/sky_result_multi_so.py:22
 #, python-format
 msgid "These orders have results or days of sales "
-msgstr "Những đơn hàng sau đây đã có kết quả hoặc ngày tính doanh số: "
+msgstr "Những đơn hàng sau đây đã có ngày tính doanh số hoặc chưa có kết quả: "
 
 #. module: sky_result_multi_sale_order
 #: view:sky_result_multi_so:sky_result_multi_sale_order.sky_result_multi_so_form

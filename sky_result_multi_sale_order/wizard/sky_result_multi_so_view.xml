@@ -20,8 +20,8 @@
         </record>
 
 
-        <record id="sky_result_multi_so_action" model="ir.actions.act_window">
-            <field name="name">Result multi SO</field>
+        <record id="sky_result_multi_so_action2" model="ir.actions.act_window">
+            <field name="name">Tính doanh số</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">sky_result_multi_so</field>
             <field name="view_type">form</field>
@@ -32,9 +32,9 @@
 
         <record model="ir.values" id="sky_result_multi_so_values">
             <field name="model_id" ref="model_sky_result_multi_so" />
-            <field name="name">Result multi SO</field>
+            <field name="name">Tính doanh số</field>
             <field name="key2">client_action_multi</field>
-            <field name="value" eval="'ir.actions.act_window,' + str(ref('sky_result_multi_so_action'))" />
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('sky_result_multi_so_action2'))" />
             <field name="key">action</field>
             <field name="model">sale.order</field>
         </record>

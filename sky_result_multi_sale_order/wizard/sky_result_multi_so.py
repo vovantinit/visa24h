@@ -16,7 +16,7 @@ class sky_result_multi_so(models.TransientModel):
             return
 
         so_ids = self.env['sale.order'].browse(self._context.get('active_ids'))
-        has_result = so_ids.filtered(lambda so: so.x_ngaytinhdoanhso or so.ketqua)
+        has_result = so_ids.filtered(lambda so: so.x_ngaytinhdoanhso or not so.ketqua)
         if has_result:
             so_names = ','.join(has_result.mapped('name'))
             raise ValidationError(_('These orders have results or days of sales ') + so_names)
