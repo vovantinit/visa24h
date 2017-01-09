@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="sky_so_report_wizard_form_view">
+        <field name="name">SO report</field>
+        <field name="model">sky.so.excel.report</field>
+        <field name="arch" type="xml">
+            <form string="So report">
+                <group>
+                    <field name="date_from" />
+                    <field name="date_to" />
+                </group>
+                <footer>
+                     <button name="submit" string="Print" type="object" class="oe_highlight" />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    
+    <record id="sky_so_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">SO report</field>
+        <field name="res_model">sky.so.excel.report</field>
+        <field name="target">new</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <menuitem id="sky_so_report_menu" name="So Report" parent="base.menu_sales" action="sky_so_report_wizard_action" sequence="20" />
+
+</data>
+</openerp>
