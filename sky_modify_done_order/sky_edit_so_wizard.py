@@ -8,6 +8,7 @@ class EditSO(models.TransientModel):
 
     pricelist_id    = fields.Many2one('product.pricelist', 'Pricelist')
     price_unit      = fields.Float('Price unit', digits=(6,2))
+    tax_id          = fields.Many2one('account.tax', domain=[('parent_id', '=', False), ('type_tax_use', '!=', 'purchase')], string='VAT')
 
     @api.multi
     def submit(self):
@@ -22,3 +23,7 @@ class EditSO(models.TransientModel):
 
         if self.price_unit:
             order.order_line.write({'price_unit': self.price_unit})
+
+        if self.tax_id:
+            order.order_line.tax_id = self.tax_id
+

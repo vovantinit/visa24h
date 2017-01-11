@@ -11,6 +11,7 @@
                     <group>
                         <field name="pricelist_id"  />
                         <field name="price_unit"  />
+                        <field name="tax_id"  />
                     </group>
                     <group>
                     </group>
@@ -38,7 +39,7 @@
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">   
             <xpath expr="//header/field[@name='state']" position="before" >
-                <button name="%(action_edit_so)d" class="oe_highlight" groups="sky_modify_order.group_sky_edit_so" string="Edit SO" type="action" />
+                <button name="%(action_edit_so)d" groups="sky_modify_order.group_sky_edit_so" string="Edit SO" type="action" />
             </xpath>
         </field>
     </record>
