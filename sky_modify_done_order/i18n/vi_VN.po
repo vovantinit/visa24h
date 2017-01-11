@@ -1,0 +1,65 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sky_modify_done_order
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-11 02:25+0000\n"
+"PO-Revision-Date: 2017-01-11 02:25+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sky_modify_done_order
+#: code:addons/sky_modify_done_order/sky_edit_so_wizard.py:15
+#, python-format
+msgid "Active model just as Sale Order!"
+msgstr "Bạn không thể thực hiện hành động ở trạng thái này!"
+
+#. module: sky_modify_done_order
+#: view:sky.edit.sale.order:sky_modify_done_order.sky_edit_so_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: sky_modify_done_order
+#: model:ir.actions.act_window,name:sky_modify_done_order.action_edit_so
+#: view:sale.order:sky_modify_done_order.sky_view_order_form
+msgid "Edit SO"
+msgstr "Sửa đơn hàng"
+
+#. module: sky_modify_done_order
+#: field:sky.edit.sale.order,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sky_modify_done_order
+#: field:sky.edit.sale.order,price_unit:0
+msgid "Price unit"
+msgstr "Đơn giá"
+
+#. module: sky_modify_done_order
+#: field:sky.edit.sale.order,pricelist_id:0
+msgid "Pricelist"
+msgstr "Bảng giá"
+
+#. module: sky_modify_done_order
+#: view:sky.edit.sale.order:sky_modify_done_order.sky_edit_so_form
+msgid "Submit"
+msgstr "Đồng ý"
+
+#. module: sky_modify_done_order
+#: code:addons/sky_modify_done_order/sky_edit_so_wizard.py:18
+#, python-format
+msgid "This SO have more than one line!"
+msgstr "Đơn hàng này có nhiều hơn 1 dòng!"
+
+#. module: sky_modify_done_order
+#: view:sky.edit.sale.order:sky_modify_done_order.sky_edit_so_form
+msgid "or"
+msgstr "hoặc"
+
