@@ -1,0 +1,237 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sky_forwarder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-15 18:46+0000\n"
+"PO-Revision-Date: 2017-01-15 18:46+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sky_forwarder
+#: model:ir.model,name:sky_forwarder.model_account_voucher
+msgid "Accounting Voucher"
+msgstr "Biên lai kế toán"
+
+#. module: sky_forwarder
+#: model:ir.ui.menu,name:sky_forwarder.sky_location_config_menu
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#. module: sky_forwarder
+#: field:sky.location.cost,value:0
+msgid "Cost"
+msgstr "Chi phí"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,create_uid:0
+#: field:sky.location,create_uid:0
+#: field:sky.location.cost,create_uid:0
+msgid "Created by"
+msgstr "Được tạo bởi"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,create_date:0
+#: field:sky.location,create_date:0
+#: field:sky.location.cost,create_date:0
+msgid "Created on"
+msgstr "Được tạo vào lúc"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,partner_id:0
+msgid "Customer"
+msgstr "Khách hàng"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,payment_id:0
+msgid "Customer payment"
+msgstr "KH thanh toán"
+
+#. module: sky_forwarder
+#: selection:sky.forwarder,state:0
+msgid "Done"
+msgstr "Hoàn thành"
+
+#. module: sky_forwarder
+#: model:ir.actions.act_window,name:sky_forwarder.action_sky_forwarder
+#: model:ir.ui.menu,name:sky_forwarder.sky_location_forwarder_menu
+#: model:ir.ui.menu,name:sky_forwarder.sky_location_forwarder_root_menu
+#: model:ir.ui.menu,name:sky_forwarder.sky_location_root_menu
+msgid "Forwarder"
+msgstr "Giao nhận"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,forwarder_cost:0
+msgid "Forwarder cost"
+msgstr "Chi phí giao nhận"
+
+#. module: sky_forwarder
+#: code:addons/sky_forwarder/models/sky_forwarder.py:127
+#, python-format
+msgid "Forwarder cost have been not setup!"
+msgstr "Chi phí giao nhận chưa được thiết lập!"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,forwarder_id:0
+msgid "Forwarder user"
+msgstr "Nhân viên giao nhận"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,from_location_id:0
+#: field:sky.location.cost,from_location_id:0
+msgid "From location"
+msgstr "Từ địa điểm"
+
+#. module: sky_forwarder
+#: code:addons/sky_forwarder/models/sky_forwarder.py:176
+#, python-format
+msgid "Have been invoice!"
+msgstr "Giao nhận này đã có hóa đơn!"
+
+#. module: sky_forwarder
+#: code:addons/sky_forwarder/models/sky_forwarder.py:163
+#, python-format
+msgid "Have been payment"
+msgstr "Giao nhận này đã có thanh toán"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,id:0
+#: field:sky.location,id:0
+#: field:sky.location.cost,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sky_forwarder
+#: model:ir.model,name:sky_forwarder.model_account_invoice
+#: view:sky.forwarder:sky_forwarder.sky_forwarder_form
+#: field:sky.forwarder,invoice_id:0
+msgid "Invoice"
+msgstr "Hóa đơn"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,write_uid:0
+#: field:sky.location,write_uid:0
+#: field:sky.location.cost,write_uid:0
+msgid "Last Updated by"
+msgstr "Cập nhật lần cuối bởi"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,write_date:0
+#: field:sky.location,write_date:0
+#: field:sky.location.cost,write_date:0
+msgid "Last Updated on"
+msgstr "Cập nhật lần cuối vào lúc"
+
+#. module: sky_forwarder
+#: model:ir.actions.act_window,name:sky_forwarder.action_sky_location
+#: model:ir.actions.act_window,name:sky_forwarder.action_sky_location_cost
+#: model:ir.ui.menu,name:sky_forwarder.sky_location_config_location_menu
+msgid "Location"
+msgstr "Địa điểm"
+
+#. module: sky_forwarder
+#: model:ir.ui.menu,name:sky_forwarder.sky_location_config_location_cost_menu
+msgid "Location Cost"
+msgstr "Chi phí giao nhận"
+
+#. module: sky_forwarder
+#: field:sky.location,name:0
+msgid "Location name"
+msgstr "Tên địa điểm"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,value:0
+msgid "Money amount"
+msgstr "Số tiền thu hộ"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,name:0
+msgid "Name"
+msgstr "Tên"
+
+#. module: sky_forwarder
+#: selection:sky.forwarder,state:0
+msgid "New"
+msgstr "Mới"
+
+#. module: sky_forwarder
+#: code:addons/sky_forwarder/models/sky_forwarder.py:125
+#, python-format
+msgid "Not found SO!"
+msgstr "Chưa có đơn hàng giao nhận!"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,note:0
+msgid "Note"
+msgstr "Ghi chú"
+
+#. module: sky_forwarder
+#: code:addons/sky_forwarder/models/sky_forwarder.py:100
+#, python-format
+msgid "Only delete with new status!"
+msgstr "Chỉ có thể xóa giao nhận ở trạng thái Mới!"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,order_ids:0
+msgid "Orders"
+msgstr "Đơn hàng"
+
+#. module: sky_forwarder
+#: view:sky.forwarder:sky_forwarder.sky_forwarder_form
+msgid "Payment"
+msgstr "KH Thanh toán"
+
+#. module: sky_forwarder
+#: selection:sky.forwarder,state:0
+msgid "Payment paid"
+msgstr "Đã thu"
+
+#. module: sky_forwarder
+#: selection:sky.forwarder,state:0
+msgid "Set forwarder user"
+msgstr "Đã chọn NV giao nhận"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,state:0
+msgid "State"
+msgstr "Trạng thái"
+
+#. module: sky_forwarder
+#: code:addons/sky_forwarder/models/sky_forwarder.py:123
+#, python-format
+msgid "The forwarder user have been not setup!"
+msgstr "Bạn chưa chọn nhận viên giao nhận!"
+
+#. module: sky_forwarder
+#: sql_constraint:sky.location.cost:0
+msgid "The location to location must be distinct!"
+msgstr "Địa điểm giao nhận phải là duy nhất!"
+
+#. module: sky_forwarder
+#: sql_constraint:sky.location:0
+msgid "The name must be unique!"
+msgstr "Tên địa điểm phải là duy nhất!"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,to_location_id:0
+#: field:sky.location.cost,to_location_id:0
+msgid "To location"
+msgstr "Đến địa điểm"
+
+#. module: sky_forwarder
+#: field:sky.forwarder,user_id:0
+msgid "User offer"
+msgstr "Người đề nghị"
+
+#. module: sky_forwarder
+#: view:sky.forwarder:sky_forwarder.sky_forwarder_form
+msgid "note"
+msgstr "Ghi chú"
+

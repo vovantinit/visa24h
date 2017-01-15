@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data noupdate="1">
+
+    <record id="sky_forwarder_type_seq" model="ir.sequence.type">
+        <field name="name">Forwarder sequence</field>
+        <field name="code">sky.forwarder.code</field>
+    </record>
+    
+
+    <record id="sky_forwarder_seq" model="ir.sequence">
+        <field name="name">Forwarder sequence</field>
+        <field name="code">sky.forwarder.code</field>
+        <field eval="1" name="number_next"/>
+        <field eval="1" name="number_increment"/>
+        <field name="prefix">DO</field>
+        <field name="padding">3</field>
+    </record>
+
+    
+</data>
+<data noupdate="1">
+
+    <record model="ir.module.category" id="module_category_forwarder">
+        <field name="name">Forwarder</field>
+        <field name="sequence">80</field>
+    </record>
+    
+    <record id="group_forwarder_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_forwarder"/>
+    </record>
+
+    <record id="group_forwarder_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('group_forwarder_user'))]"/>
+        <field name="category_id" ref="module_category_forwarder"/>
+    </record>
+    
+    
+</data>
+</openerp>
