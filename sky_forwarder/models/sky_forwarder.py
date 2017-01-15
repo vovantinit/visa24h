@@ -98,6 +98,7 @@ class Forwarder(models.Model):
         for record in self:
             if record.state != 'new' or record.payment_id or record.invoice_id:
                 raise ValidationError(_("Only delete with new status!"))
+        return super(Forwarder, self).unlink()
 
     @api.multi
     def view_payment(self):
