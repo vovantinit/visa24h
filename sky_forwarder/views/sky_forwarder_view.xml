@@ -65,6 +65,7 @@
                 <field name="from_location_id"/>
                 <field name="to_location_id"/>
                 <field name="forwarder_cost" />
+                <field name="state" />
             </tree>
         </field>
     </record>
