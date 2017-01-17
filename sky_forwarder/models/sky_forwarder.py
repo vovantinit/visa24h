@@ -2,6 +2,7 @@
 
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
+from lxml import etree
 
 class SkyLocation(models.Model):
     _name = 'sky.location'
@@ -28,6 +29,8 @@ class LocationCost(models.Model):
 
 class Forwarder(models.Model):
     _name = 'sky.forwarder'
+    _description = "Giao nhận"
+    _inherit = ['mail.thread']
 
     @api.depends('from_location_id', 'to_location_id')
     def compute_forwarder_cost(self):
@@ -57,11 +60,13 @@ class Forwarder(models.Model):
 
 
     @api.multi
-    @api.depends('forwarder_id', 'payment_id.state', 'invoice_id.state')
+    @api.depends('forwarder_id', 'payment_id.state', 'invoice_id.state', 'cancel')
     def _compute_state(self):
         for record in self:
             state = 'new'
-            if record.forwarder_id:
+            if record.cancel:
+                state = 'cancel'
+            elif record.forwarder_id:
                 state = 'set_forwarder'
                 if record.payment_id and record.payment_id.state == 'posted':
                     state = 'get_money'
@@ -69,25 +74,42 @@ class Forwarder(models.Model):
                         state = 'done'
             record.state = state
 
+    @api.multi
+    @api.depends('order_ids.partner_id')
+    def _compute_partner_id(self):
+        for record in self:
+            if len(record.order_ids.mapped('partner_id')) > 1:
+                raise ValidationError(_('All orders must have the same partner!'))
+            if len(record.order_ids.mapped('partner_id')):
+                if record.partner_id != record.order_ids[0].partner_id:
+                    record.address = record.order_ids[0].partner_id.with_context(show_address_only=1).name_get()[0][1] or ''
+                record.partner_id = record.order_ids[0].partner_id
+            else:
+                record.partner_id = False
+
+    cancel          = fields.Boolean('Cancel', track_visibility='onchange')
     state           = fields.Selection([('new', 'New'),
                                         ('set_forwarder', 'Set forwarder user'),
                                         ('get_money', 'Payment paid'), 
-                                        ('done', 'Done'),], 'State', compute='_compute_state', store=True)
+                                        ('done', 'Done'),
+                                        ('cancel', 'Cancel'),], 'State', compute='_compute_state', store=True)
     name            = fields.Char('Name', required=True, copy=False, readonly=True, size=10)
-    partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)])
-    user_id         = fields.Many2one('res.users', 'User offer', required=True)
-    forwarder_id    = fields.Many2one('res.users', 'Forwarder user')
+    partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
+    user_id         = fields.Many2one('res.users', 'User offer', required=True, track_visibility='onchange')
+    forwarder_id    = fields.Many2one('res.users', 'Forwarder user', track_visibility='onchange')
     order_ids       = fields.Many2many('sale.order', 'sky_forwarder_sale_order_ref', 'forwarder_id', 'order_id', string='Orders')
-    value           = fields.Float('Money amount', digit=(6, 2))    
+    
+    address         = fields.Char('Address', size=256, track_visibility='onchange')
+    value           = fields.Float('Money amount', digit=(6, 2), track_visibility='onchange')    
 
-    from_location_id    = fields.Many2one('sky.location', 'From location')
-    to_location_id      = fields.Many2one('sky.location', 'To location')
+    from_location_id    = fields.Many2one('sky.location', 'From location', track_visibility='onchange')
+    to_location_id      = fields.Many2one('sky.location', 'To location', track_visibility='onchange')
     forwarder_cost      = fields.Float('Forwarder cost', digit=(6, 2), compute='compute_forwarder_cost', store=True)
 
     payment_id      = fields.Many2one('account.voucher', string='Customer payment')
     invoice_id      = fields.Many2one('account.invoice', string='Invoice')
 
-    note            = fields.Text('Note')
+    note            = fields.Text('Note', track_visibility='onchange')
 
     _defaults = {
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),
@@ -151,6 +173,19 @@ class Forwarder(models.Model):
             "res_id": self.invoice_id and self.invoice_id.id or False,
         }
 
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        res = super(Forwarder, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        if view_type == 'form' and not self.env['res.users'].has_group('sky_forwarder.group_forwarder_manager') :
+            doc = etree.XML(res['arch'])
+            for node in doc.xpath("//field[@name='forwarder_id']"):
+                node.set('modifiers', '{"readonly": "1"}')
+            res['arch'] = etree.tostring(doc)
+        return res
+
+    @api.multi
+    def button_cancel(self):
+        self.write({'cancel': True})
 
 class AccountVoucher(models.Model):
     _inherit = 'account.voucher'

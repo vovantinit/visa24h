@@ -1,7 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sky_location,access_sky_location,model_sky_location,,1,0,0,0
+access_sky_location,access_sky_location,model_sky_location,,1,1,1,1
 access_sky_location_user,access_sky_location_user,model_sky_location,group_forwarder_user,1,1,1,1
-access_sky_location_cost,access_sky_location_cost,model_sky_location_cost,,1,0,0,0
-access_sky_location_cost_user,access_sky_location_cost_user,model_sky_location_cost,group_forwarder_user,1,0,0,0
-access_sky_forwarder,access_sky_forwarder,model_sky_forwarder,,1,0,0,0
+access_sky_location_cost,access_sky_location_cost,model_sky_location_cost,,1,1,1,1
+access_sky_location_cost_user,access_sky_location_cost_user,model_sky_location_cost,group_forwarder_user,1,1,1,1
+access_sky_forwarder,access_sky_forwarder,model_sky_forwarder,,1,1,1,1
 access_sky_forwarder_user,access_sky_forwarder_user,model_sky_forwarder,group_forwarder_user,1,1,1,1
