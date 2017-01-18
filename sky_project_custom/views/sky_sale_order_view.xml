@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+    
+    <record id="sky_project_view_order_form" model="ir.ui.view">
+        <field name="name">sky.project.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <field name="state" position="before" >
+                <field name="sky_project_id" invisible="1" />
+                <button name="sky_project_create" string="Create Project" type="object"  groups="project.group_project_manager" attrs="{'invisible': [('sky_project_id','!=',False)]}"/>   
+                <button string="View Tasks" type="object" groups="project.group_project_user" name="sky_view_tasks" attrs="{'invisible': [('sky_project_id','=',False)]}" context="{'search_default_project_id': [sky_project_id], 'default_project_id': sky_project_id, 'active_test': False,}" >
+                </button>             
+            </field>                               
+        </field>        
+    </record>
+
+</data>
+</openerp>
+
