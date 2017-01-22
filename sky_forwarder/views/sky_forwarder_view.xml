@@ -13,7 +13,7 @@
                     <field name="payment_id" invisible="1" />
                     <field name="invoice_id" invisible="1" />
                     <button name="button_cancel" states="new" string="Cancel" type="object" />
-                    <field name="state" widget="statusbar" />
+                    <field name="state" widget="statusbar" statusbar_visible="new,set_forwarder,delivered,get_money,done" />
                 </header>
                 <sheet>
                     <div class="oe_title oe_left">
@@ -39,6 +39,7 @@
                             <field name="address" />
                             <field name="to_location_id" />
                             <field name="forwarder_cost" />
+                            <field name="delivered" />
                         </group>
                     </group>
                     <notebook>
@@ -70,6 +71,7 @@
                 <field name="to_location_id"/>
                 <field name="forwarder_cost" />
                 <field name="state" />
+                <field name="note" />
             </tree>
         </field>
     </record>

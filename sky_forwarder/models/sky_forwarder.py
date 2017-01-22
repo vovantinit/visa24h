@@ -60,7 +60,7 @@ class Forwarder(models.Model):
 
 
     @api.multi
-    @api.depends('forwarder_id', 'payment_id.state', 'invoice_id.state', 'cancel')
+    @api.depends('forwarder_id', 'payment_id.state', 'invoice_id.state', 'cancel', 'delivered')
     def _compute_state(self):
         for record in self:
             state = 'new'
@@ -68,10 +68,12 @@ class Forwarder(models.Model):
                 state = 'cancel'
             elif record.forwarder_id:
                 state = 'set_forwarder'
-                if record.payment_id and record.payment_id.state == 'posted':
-                    state = 'get_money'
-                    if record.invoice_id and record.invoice_id.state == 'paid':
-                        state = 'done'
+                if record.delivered:
+                    state = 'delivered'
+                    if record.payment_id and record.payment_id.state == 'posted':
+                        state = 'get_money'
+                        if record.invoice_id and record.invoice_id.state == 'paid':
+                            state = 'done'
             record.state = state
 
     @api.multi
@@ -87,9 +89,9 @@ class Forwarder(models.Model):
             else:
                 record.partner_id = False
 
-    cancel          = fields.Boolean('Cancel', track_visibility='onchange')
     state           = fields.Selection([('new', 'New'),
                                         ('set_forwarder', 'Set forwarder user'),
+                                        ('delivered', 'Delivered'),
                                         ('get_money', 'Payment paid'), 
                                         ('done', 'Done'),
                                         ('cancel', 'Cancel'),], 'State', compute='_compute_state', store=True)
@@ -110,6 +112,8 @@ class Forwarder(models.Model):
     invoice_id      = fields.Many2one('account.invoice', string='Invoice')
 
     note            = fields.Text('Note', track_visibility='onchange')
+    cancel          = fields.Boolean('Cancel', track_visibility='onchange')
+    delivered       = fields.Boolean('Delivered', track_visibility='onchange')
 
     _defaults = {
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),
@@ -176,9 +180,11 @@ class Forwarder(models.Model):
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
         res = super(Forwarder, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
-        if view_type == 'form' and not self.env['res.users'].has_group('sky_forwarder.group_forwarder_manager') :
+        if view_type == 'form' and not self.env['res.users'].has_group('sky_forwarder.group_forwarder_user') :
             doc = etree.XML(res['arch'])
             for node in doc.xpath("//field[@name='forwarder_id']"):
+                node.set('modifiers', '{"readonly": "1"}')
+            for node in doc.xpath("//field[@name='delivered']"):
                 node.set('modifiers', '{"readonly": "1"}')
             res['arch'] = etree.tostring(doc)
         return res
