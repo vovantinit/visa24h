@@ -76,18 +76,27 @@ class Forwarder(models.Model):
                             state = 'done'
             record.state = state
 
-    @api.multi
-    @api.depends('order_ids.partner_id')
-    def _compute_partner_id(self):
-        for record in self:
-            if len(record.order_ids.mapped('partner_id')) > 1:
-                raise ValidationError(_('All orders must have the same partner!'))
-            if len(record.order_ids.mapped('partner_id')):
-                if record.partner_id != record.order_ids[0].partner_id:
-                    record.address = record.order_ids[0].partner_id.with_context(show_address_only=1).name_get()[0][1] or ''
-                record.partner_id = record.order_ids[0].partner_id
-            else:
-                record.partner_id = False
+    # @api.multi
+    # @api.depends('order_ids.partner_id')
+    # def _compute_partner_id(self):
+    #     for record in self:
+    #         if len(record.order_ids.mapped('partner_id')) > 1:
+    #             raise ValidationError(_('All orders must have the same partner!'))
+    #         if len(record.order_ids.mapped('partner_id')):
+    #             if record.partner_id != record.order_ids[0].partner_id:
+    #                 record.address = record.order_ids[0].partner_id.with_context(show_address_only=1).name_get()[0][1] or ''
+    #             record.partner_id = record.order_ids[0].partner_id
+    #         else:
+    #             record.partner_id = False
+
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        if self.partner_id:
+            self.address    = self.partner_id.with_context(show_address_only=1).name_get()[0][1] or ''
+            if self.partner_id.phone:
+                self.phone = self.partner_id.phone
+            elif self.partner_id.mobile:
+                self.phone = self.partner_id.mobile
 
     state           = fields.Selection([('new', 'New'),
                                         ('set_forwarder', 'Set forwarder user'),
@@ -96,12 +105,13 @@ class Forwarder(models.Model):
                                         ('done', 'Done'),
                                         ('cancel', 'Cancel'),], 'State', compute='_compute_state', store=True)
     name            = fields.Char('Name', required=True, copy=False, readonly=True, size=10)
-    partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
+    # partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
+    partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)])
     user_id         = fields.Many2one('res.users', 'User offer', required=True, track_visibility='onchange')
     forwarder_id    = fields.Many2one('res.users', 'Forwarder user', track_visibility='onchange')
     order_ids       = fields.Many2many('sale.order', 'sky_forwarder_sale_order_ref', 'forwarder_id', 'order_id', string='Orders')
     
-    address         = fields.Char('Address', size=256, track_visibility='onchange')
+    address         = fields.Char('Số nhà, đường', size=256, track_visibility='onchange')
     value           = fields.Float('Money amount', digit=(6, 2), track_visibility='onchange')    
 
     from_location_id    = fields.Many2one('sky.location', 'From location', track_visibility='onchange')
@@ -114,6 +124,11 @@ class Forwarder(models.Model):
     note            = fields.Text('Note', track_visibility='onchange')
     cancel          = fields.Boolean('Cancel', track_visibility='onchange')
     delivered       = fields.Boolean('Delivered', track_visibility='onchange')
+
+    s_date          = fields.Date('Ngày đề nghị', default=fields.Date.today())
+    s_datetime      = fields.Datetime('Thời giao giao nhận', default=fields.Datetime.now(), track_visibility='onchange')
+    real_time       = fields.Datetime('Thời giao thực tế', track_visibility='onchange')
+    phone           = fields.Char('Số điện thoại')
 
     _defaults = {
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),

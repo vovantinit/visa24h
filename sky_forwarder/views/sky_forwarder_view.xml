@@ -31,15 +31,19 @@
                             <field name="user_id" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="forwarder_id" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="order_ids" widget="many2many_tags" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
-                            <field name="partner_id" />
+                            <field name="s_date" />
+                            <field name="s_datetime" />
                             <field name="value" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
-                        </group>
-                        <group attrs="{'readonly': [('invoice_id', '!=', False)]}">
+                            <field name="forwarder_cost" />
                             <field name="from_location_id" />
+                        </group>
+                        <group string="Địa chỉ nhận hàng" attrs="{'readonly': [('invoice_id', '!=', False)]}">
+                            <field name="partner_id" />
+                            <field name="phone" />
                             <field name="address" />
                             <field name="to_location_id" />
-                            <field name="forwarder_cost" />
                             <field name="delivered" />
+                            <field name="real_time" />
                         </group>
                     </group>
                     <notebook>
@@ -64,6 +68,8 @@
             <tree>
                 <field name="name"/>
                 <field name="user_id" />
+                <field name="s_date" />
+                <field name="s_datetime" />
                 <field name="forwarder_id" />
                 <field name="partner_id" />
                 <field name="value" />
@@ -83,7 +89,7 @@
         <field name="arch" type="xml">
             <search>
                 <filter name="my_do" domain="['|',('user_id','=',uid),('forwarder_id','=',uid)]" help="My DO"/>
-                <field name="name" string="DO" filter_domain="['|','|','|', ('name','ilike',self), ('user_id','ilike',self), ('partner_id', 'ilike', self), ('forwarder_id', 'ilike', self)]"/>
+                <field name="name" string="DO" filter_domain="['|','|','|','|', ('name','ilike',self), ('user_id','ilike',self), ('partner_id', 'ilike', self), ('forwarder_id', 'ilike', self),('phone', 'ilike', self)]"/>
                 <field name="from_location_id" string="From location"/>
                 <field name="to_location_id" string="To location"/>
                 <separator orientation="vertical"/>
