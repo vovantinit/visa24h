@@ -70,13 +70,13 @@
                 <field name="s_datetime" />
                 <field name="partner_id" />
                 <field name="address" />
+                <field name="to_location_id"/>
                 <field name="phone" />
                 <field name="user_id" />
                 <field name="forwarder_id" />
                 <field name="value" />
-                <!-- <field name="from_location_id"/>
-                <field name="to_location_id"/>
-                <field name="forwarder_cost" /> -->
+                <!-- <field name="from_location_id"/> -->
+                <!-- <field name="forwarder_cost" /> -->
                 <field name="note" />
                 <field name="state" />
             </tree>
@@ -122,6 +122,7 @@
         <field name="arch" type="xml">
             <tree edit="1" editable="top">
                 <field name="name"/>
+                <field name="user_ids" widget="many2many_tags" options="{'no_create_edit': True}" />
             </tree>
         </field>
     </record>

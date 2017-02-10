@@ -4,10 +4,16 @@ from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 from lxml import etree
 
+class ResUsers(models.Model):
+    _inherit = 'res.users'
+
+    location_ids = fields.Many2many('sky.location', 'sky_users_location_rel', 'user_id', 'location_id', string='Địa điểm')
+
 class SkyLocation(models.Model):
     _name = 'sky.location'
 
     name = fields.Char('Location name', required=True)
+    user_ids = fields.Many2many('res.users', 'sky_users_location_rel', 'location_id', 'user_id', string='Nhân viên')
 
     _sql_constraints = [
         ('name_uniq', 'unique (name)', 'The name must be unique!')
@@ -36,12 +42,10 @@ class Forwarder(models.Model):
     def compute_forwarder_cost(self):
         if self.from_location_id and self.to_location_id:
             location_cost = self.env['sky.location.cost'].search([('from_location_id', '=', self.from_location_id.id), ('to_location_id', '=', self.to_location_id.id)], limit=1)
-            # if not location_cost:
-            #     raise ValidationError(_('Location to location have not setup!'))
+            if not location_cost:
+                raise ValidationError(_('Chi phí chưa được thiết lập!'))
             if location_cost:
                 self.forwarder_cost = location_cost.value
-            else: 
-                self.forwarder_cost = 0
         else:
             self.forwarder_cost = 0
 
@@ -104,6 +108,12 @@ class Forwarder(models.Model):
                                         ('get_money', 'Payment paid'), 
                                         ('done', 'Done'),
                                         ('cancel', 'Cancel'),], 'State', compute='_compute_state', store=True)
+
+    @api.onchange('forwarder_id')
+    def onchange_forwarder_id(self):
+        if self.forwarder_id and self.forwarder_id.location_ids:
+            self.from_location_id = self.forwarder_id.location_ids[0].id
+
     name            = fields.Char('Name', required=True, copy=False, readonly=True, size=10)
     # partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
     partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)])
@@ -111,7 +121,7 @@ class Forwarder(models.Model):
     forwarder_id    = fields.Many2one('res.users', 'Forwarder user', track_visibility='onchange')
     order_ids       = fields.Many2many('sale.order', 'sky_forwarder_sale_order_ref', 'forwarder_id', 'order_id', string='Orders')
     
-    address         = fields.Char('Số nhà, đường', size=256, track_visibility='onchange')
+    address         = fields.Text('Số nhà, đường', size=256, track_visibility='onchange')
     value           = fields.Float('Money amount', digit=(6, 2), track_visibility='onchange')    
 
     from_location_id    = fields.Many2one('sky.location', 'From location', track_visibility='onchange')
