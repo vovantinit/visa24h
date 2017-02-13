@@ -3,6 +3,7 @@
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 from lxml import etree
+import datetime
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
@@ -12,8 +13,8 @@ class ResUsers(models.Model):
 class SkyLocation(models.Model):
     _name = 'sky.location'
 
-    name = fields.Char('Location name', required=True)
-    user_ids = fields.Many2many('res.users', 'sky_users_location_rel', 'location_id', 'user_id', string='Nhân viên')
+    name        = fields.Char('Location name', required=True)
+    user_ids    = fields.Many2many('res.users', 'sky_users_location_rel', 'location_id', 'user_id', string='Nhân viên')
 
     _sql_constraints = [
         ('name_uniq', 'unique (name)', 'The name must be unique!')
@@ -135,9 +136,9 @@ class Forwarder(models.Model):
     cancel          = fields.Boolean('Cancel', track_visibility='onchange')
     delivered       = fields.Boolean('Delivered', track_visibility='onchange')
 
-    s_date          = fields.Date('Ngày đề nghị', default=fields.Date.today())
-    s_datetime      = fields.Datetime('Thời giao giao nhận', default=fields.Datetime.now(), track_visibility='onchange')
-    real_time       = fields.Datetime('Thời giao thực tế', track_visibility='onchange')
+    s_date          = fields.Date('Ngày đề nghị', default=datetime.date.today())
+    s_datetime      = fields.Text('Thời gian giao nhận', track_visibility='onchange')
+    real_time       = fields.Datetime('Thời gian thực tế', track_visibility='onchange')
     phone           = fields.Char('Số điện thoại')
 
     _defaults = {

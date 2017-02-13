@@ -67,16 +67,17 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="s_date"/>
                 <field name="s_datetime" />
                 <field name="partner_id" />
+                <field name="from_location_id"/>
                 <field name="address" />
                 <field name="to_location_id"/>
                 <field name="phone" />
                 <field name="user_id" />
                 <field name="forwarder_id" />
-                <field name="value" />
-                <!-- <field name="from_location_id"/> -->
-                <!-- <field name="forwarder_cost" /> -->
+                <field name="value" sum="Tổng" />
+                <!-- <field name="forwarder_cost" sum="Tổng" /> -->
                 <field name="note" />
                 <field name="state" />
             </tree>
@@ -97,8 +98,12 @@
                 <group  expand="0" string="Group By">
                     <filter string="Offer user" context="{'group_by':'user_id'}"/>
                     <filter string="Forwarder user" context="{'group_by':'forwarder_id'}"/>
-                    <filter string="Customer" context="{'group_by':'partner_id'}"/>
-                    <filter string="States" context="{'group_by':'state'}"/>
+                    <filter string="Từ địa điểm" context="{'group_by':'from_location_id'}"/>
+                    <filter string="Quận, TP" context="{'group_by':'to_location_id'}"/>
+                    <filter string="Tháng đề nghị" context="{'group_by':'s_date'}"/>
+                    <filter string="Ngày đề nghị" context="{'group_by':'s_date:day'}"/>
+                    <filter string="Khách hàng" context="{'group_by':'partner_id'}"/>
+                    <filter string="Trạng thái" context="{'group_by':'state'}"/>
                 </group>
             </search>
         </field>
@@ -179,6 +184,21 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree</field>
     </record>  
+
+    <record id="view_users_form" model="ir.ui.view">
+        <field name="name">sky.res.users.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+            <notebook position="inside" >
+                <page string="Nhân viên giao nhận" >
+                    <field name="location_ids" widget="many2many_tags" />
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+
 
 
 </data>
