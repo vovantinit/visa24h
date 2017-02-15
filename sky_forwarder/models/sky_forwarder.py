@@ -14,6 +14,7 @@ class SkyLocation(models.Model):
     _name = 'sky.location'
 
     name        = fields.Char('Location name', required=True)
+    is_start    = fields.Boolean('Là địa điểm bắt đầu')
     user_ids    = fields.Many2many('res.users', 'sky_users_location_rel', 'location_id', 'user_id', string='Nhân viên')
 
     _sql_constraints = [
@@ -110,10 +111,10 @@ class Forwarder(models.Model):
                                         ('done', 'Done'),
                                         ('cancel', 'Cancel'),], 'State', compute='_compute_state', store=True)
 
-    @api.onchange('forwarder_id')
+    @api.onchange('user_id')
     def onchange_forwarder_id(self):
-        if self.forwarder_id and self.forwarder_id.location_ids:
-            self.from_location_id = self.forwarder_id.location_ids[0].id
+        if self.user_id and self.user_id.location_ids:
+            self.from_location_id = self.user_id.location_ids[0].id
 
     name            = fields.Char('Name', required=True, copy=False, readonly=True, size=10)
     # partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
@@ -125,8 +126,8 @@ class Forwarder(models.Model):
     address         = fields.Text('Số nhà, đường', size=256, track_visibility='onchange')
     value           = fields.Float('Money amount', digit=(6, 2), track_visibility='onchange')    
 
-    from_location_id    = fields.Many2one('sky.location', 'From location', track_visibility='onchange')
-    to_location_id      = fields.Many2one('sky.location', 'To location', track_visibility='onchange')
+    from_location_id    = fields.Many2one('sky.location', 'From location', domain=[('is_start','=',True)], track_visibility='onchange')
+    to_location_id      = fields.Many2one('sky.location', 'To location', domain=[('is_start','=',False)], track_visibility='onchange')
     forwarder_cost      = fields.Float('Forwarder cost', digit=(6, 2), compute='compute_forwarder_cost', store=True)
 
     payment_id      = fields.Many2one('account.voucher', string='Customer payment')
@@ -136,12 +137,13 @@ class Forwarder(models.Model):
     cancel          = fields.Boolean('Cancel', track_visibility='onchange')
     delivered       = fields.Boolean('Delivered', track_visibility='onchange')
 
-    s_date          = fields.Date('Ngày đề nghị', default=datetime.date.today())
+    s_date          = fields.Date('Ngày đề nghị')
     s_datetime      = fields.Text('Thời gian giao nhận', track_visibility='onchange')
     real_time       = fields.Datetime('Thời gian thực tế', track_visibility='onchange')
     phone           = fields.Char('Số điện thoại')
 
     _defaults = {
+        's_date':  datetime.date.today(),
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),
     }
 

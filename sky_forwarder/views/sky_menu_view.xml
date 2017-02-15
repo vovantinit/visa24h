@@ -13,7 +13,9 @@
 
     <menuitem id="sky_location_config_menu" parent="sky_location_root_menu" name="Configuration" sequence="30" />
 
-    <menuitem id="sky_location_config_location_menu" name="Location" parent="sky_location_config_menu" action="action_sky_location" sequence="10" />
+    <menuitem id="sky_location_config_location_menu_start" parent="sky_location_config_menu" action="action_sky_location_start" sequence="10" />
+    <menuitem id="sky_location_config_location_menu" parent="sky_location_config_menu" action="action_sky_location" sequence="15" />
+
     <menuitem id="sky_location_config_location_cost_menu" name="Location Cost" parent="sky_location_config_menu" action="action_sky_location_cost" sequence="20" />
 
 
