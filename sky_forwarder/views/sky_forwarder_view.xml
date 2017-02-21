@@ -91,6 +91,12 @@
         <field name="arch" type="xml">
             <search>
                 <filter name="my_do" domain="['|',('user_id','=',uid),('forwarder_id','=',uid)]" help="My DO"/>
+                 <filter name="state_new" string="Mới" domain="[('state','=','new')]" />
+                <filter name="set_forwarder" string="Đã phân bổ" domain="[('state','=','set_forwarder')]" />
+                <filter name="delivered" string="Đã giao" domain="[('state','=','delivered')]" />
+                <filter name="get_money" string="Đã nộp tiền" domain="[('state','=','get_money')]" />
+                <filter name="done" string="Hoàn thành" domain="[('state','=','done')]" />
+                <filter name="cancel" string="Hủy" domain="[('state','=','cancel')]" />
                 <field name="name" string="DO" filter_domain="['|','|','|','|', ('name','ilike',self), ('user_id','ilike',self), ('partner_id', 'ilike', self), ('forwarder_id', 'ilike', self),('phone', 'ilike', self)]"/>
                 <field name="from_location_id" string="From location"/>
                 <field name="to_location_id" string="To location"/>

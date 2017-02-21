@@ -3,6 +3,8 @@
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 from lxml import etree
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+import time
 import datetime
 
 class ResUsers(models.Model):
@@ -138,14 +140,20 @@ class Forwarder(models.Model):
     delivered       = fields.Boolean('Delivered', track_visibility='onchange')
 
     s_date          = fields.Date('Ngày đề nghị')
-    s_datetime      = fields.Text('Thời gian giao nhận', track_visibility='onchange')
+    s_datetime      = fields.Char('Thời gian giao nhận', track_visibility='onchange')
     real_time       = fields.Datetime('Thời gian thực tế', track_visibility='onchange')
     phone           = fields.Char('Số điện thoại')
 
     _defaults = {
-        's_date':  datetime.date.today(),
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),
     }
+
+    @api.model
+    def default_get(self, fields):
+        res = super(Forwarder, self).default_get(fields)
+        res['s_date'] = time.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
+        return res
 
     @api.multi
     def unlink(self):
@@ -220,6 +228,10 @@ class Forwarder(models.Model):
     @api.multi
     def button_cancel(self):
         self.write({'cancel': True})
+
+
+Forwarder()
+
 
 class AccountVoucher(models.Model):
     _inherit = 'account.voucher'
