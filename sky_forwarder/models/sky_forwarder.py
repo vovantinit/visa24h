@@ -25,7 +25,7 @@ class SkyLocation(models.Model):
 
 class LocationCost(models.Model):
     _name = 'sky.location.cost'
-    _order = 's_date asc'
+    _order = 'from_location_id asc'
 
 
     from_location_id    = fields.Many2one('sky.location', string='From location', required=True)
@@ -41,7 +41,7 @@ class Forwarder(models.Model):
     _name = 'sky.forwarder'
     _description = "Giao nhận"
     _inherit = ['mail.thread']
-    _order = 'from_location_id asc'
+    _order = 's_date asc'
 
     @api.depends('from_location_id', 'to_location_id')
     def compute_forwarder_cost(self):
