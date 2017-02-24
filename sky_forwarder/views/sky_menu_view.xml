@@ -10,6 +10,8 @@
 
     <menuitem id="sky_location_forwarder_menu" name="Forwarder" parent="sky_location_forwarder_root_menu" action="action_sky_forwarder" sequence="5" />
 
+    <menuitem id="sky_set_forwarder_menu" name="Gán nhân viên giao nhận" parent="sky_location_forwarder_root_menu" action="action_sky_set_forwarder" sequence="10" />
+
 
     <menuitem id="sky_location_config_menu" parent="sky_location_root_menu" name="Configuration" sequence="30" />
 

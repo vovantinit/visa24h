@@ -25,7 +25,7 @@ class SkyLocation(models.Model):
 
 class LocationCost(models.Model):
     _name = 'sky.location.cost'
-    _order = 'from_location_id asc'
+    _order = 's_date asc'
 
 
     from_location_id    = fields.Many2one('sky.location', string='From location', required=True)
@@ -41,6 +41,7 @@ class Forwarder(models.Model):
     _name = 'sky.forwarder'
     _description = "Giao nhận"
     _inherit = ['mail.thread']
+    _order = 'from_location_id asc'
 
     @api.depends('from_location_id', 'to_location_id')
     def compute_forwarder_cost(self):
@@ -216,7 +217,7 @@ class Forwarder(models.Model):
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
         res = super(Forwarder, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
-        if view_type == 'form' and not self.env['res.users'].has_group('sky_forwarder.group_forwarder_user') :
+        if view_type in ('form', 'tree') and not self.env['res.users'].has_group('sky_forwarder.group_forwarder_user') :
             doc = etree.XML(res['arch'])
             for node in doc.xpath("//field[@name='forwarder_id']"):
                 node.set('modifiers', '{"readonly": "1"}')

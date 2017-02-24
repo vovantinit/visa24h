@@ -77,9 +77,33 @@
                 <field name="user_id" />
                 <field name="forwarder_id" />
                 <field name="value" sum="Tổng" />
-                <!-- <field name="forwarder_cost" sum="Tổng" /> -->
+                <field name="forwarder_cost" sum="Tổng" />
                 <field name="note" />
                 <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_sky_set_forwarder_tree">
+        <field name="name">sky.forwarder.tree</field>
+        <field name="model">sky.forwarder</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <tree edit="1" editable="bottom" >
+                <field name="name" readonly="1" />
+                <field name="s_date" readonly="1" />
+                <field name="s_datetime" readonly="1" />
+                <field name="partner_id" readonly="1" />
+                <field name="from_location_id" readonly="1" />
+                <field name="address" readonly="1" />
+                <field name="to_location_id" readonly="1"/>
+                <field name="phone" readonly="1" />
+                <field name="user_id" readonly="1" />
+                <field name="forwarder_id" />
+                <field name="value" sum="Tổng" readonly="1" />
+                <field name="forwarder_cost" sum="Tổng" readonly="1"/>
+                <field name="note" readonly="1" />
+                <field name="state" readonly="1"/>
             </tree>
         </field>
     </record>
@@ -122,6 +146,15 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{'default_user_id': uid, 'search_default_my_do': 1}</field>
+    </record> 
+
+    <record id="action_sky_set_forwarder" model="ir.actions.act_window">
+        <field name="name">Gán nhân viên giao nhận</field>
+        <field name="res_model">sky.forwarder</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_user_id': uid, 'search_default_my_do': 1}</field>
+        <field name="view_id" ref="view_sky_set_forwarder_tree" />
     </record>    
 
 
