@@ -21,9 +21,9 @@
                         <h1><field name="name" /></h1>
                     </div>
                     <div class="oe_right oe_button_box" name="buttons">
-                        <button class="oe_inline oe_stat_button" type="object" name="view_payment" icon="fa-strikethrough" context="{}" string="Payment">                            
+                        <button class="oe_inline oe_stat_button" type="object" name="view_payment" icon="fa-strikethrough" context="{}" string="Payment" attrs="{'invisible': [('value','&lt;',10)]}" >                            
                         </button>
-                        <button class="oe_inline oe_stat_button" attrs="{'invisible': [('payment_id', '=', False)]}" type="object" name="view_invoice" icon="fa-pencil-square-o" context="{}" string="Invoice">
+                        <button class="oe_inline oe_stat_button" attrs="{'invisible': [('payment_id', '=', False),('value','&gt;',9)]}" type="object" name="view_invoice" icon="fa-pencil-square-o" context="{}" string="Invoice">
                         </button>
                     </div>
                     <group>
@@ -31,18 +31,18 @@
                             <field name="user_id" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="forwarder_id" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="order_ids" widget="many2many_tags" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
-                            <field name="s_date" />
-                            <field name="s_datetime" />
-                            <field name="value" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
+                            <field name="s_date" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}"/>
+                            <field name="s_datetime" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}"/>
+                            <field name="value" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="forwarder_cost" />
-                            <field name="from_location_id" />
+                            <field name="from_location_id" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}"/>
                         </group>
                         <group string="Địa chỉ nhận hàng" attrs="{'readonly': [('invoice_id', '!=', False)]}">
-                            <field name="partner_id" />
-                            <field name="phone" />
-                            <field name="address" />
-                            <field name="to_location_id" />
-                            <field name="delivered" />
+                            <field name="partner_id" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
+                            <field name="phone" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
+                            <field name="address" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
+                            <field name="to_location_id" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
+                            <field name="delivered" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
                             <field name="real_time" />
                         </group>
                     </group>
@@ -115,6 +115,7 @@
         <field name="arch" type="xml">
             <search>
                 <filter name="my_do" domain="['|',('user_id','=',uid),('forwarder_id','=',uid)]" help="My DO"/>
+                <filter name="null_forwarder" string="Chưa gán NV giao nhận" domain="[ ('forwarder_id','=',False) ]" />
                  <filter name="state_new" string="Mới" domain="[('state','=','new')]" />
                 <filter name="set_forwarder" string="Đã phân bổ" domain="[('state','=','set_forwarder')]" />
                 <filter name="delivered" string="Đã giao" domain="[('state','=','delivered')]" />
@@ -153,7 +154,7 @@
         <field name="res_model">sky.forwarder</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'default_user_id': uid, 'search_default_my_do': 1}</field>
+        <field name="context">{'default_user_id': uid, 'search_default_null_forwarder': 1}</field>
         <field name="view_id" ref="view_sky_set_forwarder_tree" />
     </record>    
 

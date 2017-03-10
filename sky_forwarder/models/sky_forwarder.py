@@ -7,6 +7,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FO
 import time
 import datetime
 
+
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
@@ -69,7 +70,7 @@ class Forwarder(models.Model):
 
 
     @api.multi
-    @api.depends('forwarder_id', 'payment_id.state', 'invoice_id.state', 'cancel', 'delivered')
+    @api.depends('forwarder_id', 'payment_id.state', 'invoice_id.state', 'cancel', 'delivered', 'value')
     def _compute_state(self):
         for record in self:
             state = 'new'
@@ -79,7 +80,7 @@ class Forwarder(models.Model):
                 state = 'set_forwarder'
                 if record.delivered:
                     state = 'delivered'
-                    if record.payment_id and record.payment_id.state == 'posted':
+                    if record.value < 10 or (record.payment_id and record.payment_id.state == 'posted'):
                         state = 'get_money'
                         if record.invoice_id and record.invoice_id.state == 'paid':
                             state = 'done'
@@ -127,7 +128,7 @@ class Forwarder(models.Model):
     order_ids       = fields.Many2many('sale.order', 'sky_forwarder_sale_order_ref', 'forwarder_id', 'order_id', string='Orders')
     
     address         = fields.Text('Số nhà, đường', size=256, track_visibility='onchange')
-    value           = fields.Float('Money amount', digit=(6, 2), track_visibility='onchange')    
+    value           = fields.Float('Money amount', digit=(20, 2), track_visibility='onchange')    
 
     from_location_id    = fields.Many2one('sky.location', 'From location', domain=[('is_start','=',True)], track_visibility='onchange')
     to_location_id      = fields.Many2one('sky.location', 'To location', domain=[('is_start','=',False)], track_visibility='onchange')
