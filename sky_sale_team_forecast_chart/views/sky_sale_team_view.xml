@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    
+    <record id="crm_case_section_view_tree" model="ir.ui.view">
+        <field name="name">sky.crm.case.section.tree</field>
+        <field name="model">crm.case.section</field>
+        <field name="inherit_id" ref="sales_team.crm_case_section_view_tree" />
+        <field name="arch" type="xml">         
+            <field name="user_id" position="after" >
+                <field name="invoiced_target" />
+                <field name="invoiced_forecast" />
+                <field name="real_monthly_confirmed" />
+                <field name="real_monthly_invoiced" />
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>

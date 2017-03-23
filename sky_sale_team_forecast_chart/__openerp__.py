@@ -33,6 +33,7 @@
     'depends': ['sky_company_currency'],
     'data': [
         'security/ir.model.access.csv',
+        'views/sky_sale_team_view.xml',
         'views/sky_sale_team_forecast_view.xml',
     ],
     'demo': [],

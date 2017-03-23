@@ -25,7 +25,7 @@
                 <field name="period_id" widget="selection" />
                 <field name="invoiced_target" />
                 <field name="invoiced_forecast" />
-                <field name="monthly_quoted" />
+                <!-- <field name="monthly_quoted" /> -->
                 <field name="monthly_confirmed" />
                 <field name="monthly_invoiced" />
             </tree>
