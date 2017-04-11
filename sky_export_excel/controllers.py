@@ -83,6 +83,7 @@ class AdvanceExport(http.Controller):
             'pass': u'Đạt',
             'fall': u'Không đạt',
             'canceled': u'Không làm nữa',
+            'delay': u'Treo',
         }
 
         for so in so_ids:
