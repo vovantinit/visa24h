@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <record model="ir.actions.act_url" id="hanh_dong_giao_nhan">
+        <field name="name">Giao nhận</field>
+        <field name="url">/giao_nhan</field>
+        <field name="target">self</field>
+    </record>
+
+    <template id="index">
+        <!-- <t t-call="website.layout">
+            <t t-set="title">Giao nhận</t>
+            <div class="oe_structure"> -->
+
+<html lang="en">
+<head>
+  <title>Giao nhận</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> 
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+  <script type="text/javascript" src="/sky_forwarder/static/src/js/main.js"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a href="/giao_nhan" class="navbar-brand logo">
+                <img src="/logo.png" t-att-title="res_company.name" style="max-height: 50px; margin-top: -15px;" />
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Được phân bổ</a></li>
+                <li><a href="#">Chưa phân bổ</a></li>
+                <li><a href="#">Tất cả</a></li>
+                <li><a href="/web/session/logout">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </div><!--/.container-fluid -->
+</nav>
+
+<div class="container sky_giao_nhan">
+
+<!-- <div class="text-right" >
+    <ul class="pagination" style="margin: 0 0;">
+        <li class="active"><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+    </ul>
+</div> -->
+
+<div class="row" >
+
+    <!-- <div class='col-xs-6'>
+            <input type='text' class="form-control" id='datetimepicker4' />
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker4').datepicker();
+        });
+    </script> -->
+
+<div class="col-xs-12" >
+
+    <table t-if="is_manager" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nhân viên</th>
+            <th>Đã nhận</th>
+            <th>Đã giao</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr t-foreach="thong_ke" t-as="chi_tiet_thong_ke">
+            <td><t t-esc="chi_tiet_thong_ke['name']" /></td>
+            <td><t t-esc="chi_tiet_thong_ke['sl_nhan']" /></td>
+            <td><t t-esc="chi_tiet_thong_ke['sl_giao']" /></td>
+          </tr>
+          
+        </tbody>
+    </table>
+
+    <div style="text-align: right;" >
+        <a href="#" style="display: inline-block;
+                            padding: 5px 14px;
+                            background-color: #fff;
+                            border: 1px solid #ddd;
+                            border-radius: 15px;">Trước</a>
+        <a href="#" style="display: inline-block;
+                            padding: 5px 14px;
+                            background-color: #fff;
+                            border: 1px solid #ddd;
+                            border-radius: 15px;">Sau</a>                            
+    </div>
+<!-- <ul id="newStuff" class="nav nav-tabs nav-stacked"> -->
+
+<t t-foreach="datas" t-as="data">
+
+    <!-- <li> -->
+
+    <div data-toggle="collapse" t-att-data-target="'#' + str(data.id)" t-att-style="'padding: 6px 10px;
+        border: 1px solid #ccc;  
+        margin-top: 2px;  
+        border-radius: 4px; ' + ('background-color: bisque;' if data.forwarder_id and data.forwarder_id.id == user else 'background-color: #ffffcc;' if data.forwarder_id  else '')">
+
+        <div t-att-class="'glyphicon glyphicon-ok da_giao' + str(data.id) + (' hidden' if not data.delivered else '') " t-att-style="'margin-left: 96%;color: #337ab7;'" />
+        <div>
+            <div>
+                <span t-field="data.s_date" /> <span t-field="data.s_datetime" />
+            </div>
+            <div>
+                <span t-field="data.partner_id" /> <span t-field="data.phone" />
+            </div>
+            <div>
+                <span t-esc="data.address" /> <span t-field="data.to_location_id" />
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse" t-att-id="data.id" >
+        <div class="panel panel-default">              
+            <div class="panel-body">
+                <div>
+                    <strong>Chi phí giao nhận:</strong>   
+                    <span t-field="data.forwarder_cost" />
+                </div>
+                <div>
+                    <strong>Số tiền thu hộ:</strong>   
+                    <span t-field="data.value" />
+                </div>
+                <div t-if="data.note">
+                    <strong>Ghi chú:</strong>   
+                    <span t-field="data.note" />
+                </div>
+                <div t-if="data.note_v2">
+                    <strong>Ghi chú của giao nhận:</strong>   
+                    <span t-field="data.note_v2" />
+                </div>
+                <div t-if="is_manager and data.forwarder_id">
+                    <strong>Giao nhận:</strong>   
+                    <span t-field="data.forwarder_id" />
+                </div>
+            </div>
+
+            <div>
+                <t t-if="not is_manager and not data.delivered and not data.forwarder_id" >
+                    <form t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;record_type=set&amp;to_id=#{user}" method="POST" style="float: left; margin-left: 5px;" >
+                        <button type="submit" class="btn btn-primary" >Nhận</button>
+                    </form>
+                </t>
+                <t t-if="not data.delivered and data.forwarder_id and data.forwarder_id.id == user" >
+                    <form t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;record_type=del" method="POST" style="float: left; margin-left: 5px;">
+                        <button type="submit" class="btn btn-primary" >Không nhận</button>
+                    </form>
+                </t>
+
+                <t t-if="data.forwarder_id and data.forwarder_id.id == user and not data.delivered" >
+                    <form t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;delivered=t" method="POST" style="float: left; margin-left: 5px;">
+                        <button type="submit" class="btn btn-primary" >Đã giao</button>
+                    </form>
+                    
+                </t> 
+
+                <t t-if="data.forwarder_id and data.forwarder_id.id == user and data.delivered" >
+                    <form t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;delivered=f" method="POST" style="float: left; margin-left: 5px;">
+                        <button type="submit" class="btn btn-primary" >Chưa giao</button>
+                    </form>
+                    
+                </t>                    
+
+                <t t-if="is_manager and not data.delivered and not data.forwarder_id" >
+                    <form style="float: left; margin-left: 5px;">
+                        <button type="button" data-toggle="collapse" t-att-data-target="'#gan_giao_nhan' + str(data.id)" class="btn btn-primary" >Gán</button>
+                    </form>
+                </t>
+
+                <t t-if="data.forwarder_id and data.forwarder_id.id == user" >
+                    <form style="float: left; margin-left: 5px;">
+                        <button type="button" data-toggle="collapse" t-att-data-target="'#ghichu' + str(data.id)" class="btn btn-primary" >Ghi chú</button>
+                    </form>
+                </t>
+
+                <div class="clearfix"/>
+
+                <!-- Danh cho truong phong, chon giao nhan -->
+                <div class="collapse" t-attf-id="gan_giao_nhan#{data.id}" >
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="text-align: center;">
+                            <t t-foreach="user_ids" t-as="nhan_vien">
+                                <form t-attf-id="tp-gan-nv-#{data.id}-#{nhan_vien.id}" t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;to_id=#{nhan_vien.id}&amp;record_type=set" method="POST" style="float: left; margin-left: 5px;">
+                                    <input type="text" class="hidden" name="record_id" t-attf-value="#{data.id}" />
+                                    <input type="text" class="hidden" name="user_id" t-attf-value="#{nhan_vien.id}"  />
+                                    <img class="gan_giao_nhan" t-attf-data-id="#{data.id}" t-attf-data-nhan-vien-id="#{nhan_vien.id}" t-attf-src="data:image/png;base64, #{nhan_vien.partner_id.image_small}" t-att-title="nhan_vien.name" t-attf-style="max-width: 50px;" />
+                                </form>
+
+                            </t>
+                        </div>
+                        <div class="clearfix"/>
+                    </div>
+                </div>
+
+                <!-- Ghi chu cho nhan vien giao nhan -->
+                <div class="collapse" t-attf-id="ghichu#{data.id}" >
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="text-align: center;">
+                            <form t-attf-action="/ghichu?record_id=#{str(data.id)}" method="POST" >
+                                <input type="textarea" class="form-control" t-attf-value="#{data.note_v2}" rows="3" name="comment" />
+                                <button type="submit" class="btn btn-primary" style="float: right;margin-top: 2px;">Lưu</button>
+                            </form>
+                        </div>
+                        <div class="clearfix"/>
+                    </div>
+                </div>
+
+            </div>
+
+                 
+
+                <!-- <div class="panel-footer">                    
+                </div> -->
+
+               
+        </div>
+    </div>
+
+    <!-- </li> -->
+
+</t>
+
+<!-- </ul> -->
+
+  
+</div>
+</div>
+</div>
+                
+</body>
+</html>                
+
+            <!-- </div>
+        </t> -->
+    </template>
+
+</data>
+</openerp>

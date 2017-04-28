@@ -48,7 +48,14 @@
                     </group>
                     <notebook>
                         <page string="note">
-                            <field name="note" />
+                            <group>
+                                <group>
+                                    <field name="note" />
+                                </group>
+                                <group>
+                                    <field name="note_v2" />
+                                </group>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>

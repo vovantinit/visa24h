@@ -80,10 +80,11 @@ class Forwarder(models.Model):
                 state = 'set_forwarder'
                 if record.delivered:
                     state = 'delivered'
-                    if record.value < 10 or (record.payment_id and record.payment_id.state == 'posted'):
+                    if (record.payment_id and record.payment_id.state == 'posted'):
                         state = 'get_money'
-                        if record.invoice_id and record.invoice_id.state == 'paid':
-                            state = 'done'
+                    if (record.value < 10 or (record.payment_id and record.payment_id.state == 'posted')) \
+                        and record.invoice_id and record.invoice_id.state == 'paid':
+                        state = 'done'
             record.state = state
 
     # @api.multi
@@ -120,6 +121,17 @@ class Forwarder(models.Model):
         if self.user_id and self.user_id.location_ids:
             self.from_location_id = self.user_id.location_ids[0].id
 
+    @api.multi
+    @api.depends('forwarder_id', 'delivered')
+    def _sky_compute_sequence(self):
+        for record in self:
+            if not record.forwarder_id:
+                record.sequence = 1
+            elif record.forwarder_id and record.delivered:
+                record.sequence = 3
+            else:
+                record.sequence = 2
+
     name            = fields.Char('Name', required=True, copy=False, readonly=True, size=10)
     # partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
     partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)])
@@ -145,6 +157,11 @@ class Forwarder(models.Model):
     s_datetime      = fields.Char('Thời gian giao nhận', track_visibility='onchange')
     real_time       = fields.Datetime('Thời gian thực tế', track_visibility='onchange')
     phone           = fields.Char('Số điện thoại')
+
+    active          = fields.Boolean('Active', default=True)
+    sequence        = fields.Integer('sequence', compute='_sky_compute_sequence', store=True)
+    note_v2         = fields.Text('Ghi chú của NV giao nhận')
+
 
     _defaults = {
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),

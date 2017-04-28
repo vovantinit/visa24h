@@ -36,6 +36,7 @@
         'security/ir.model.access.csv',
         'views/sky_forwarder_view.xml',
         'views/sky_menu_view.xml',
+        'views/website_template.xml',
     ],
     'demo': [],
     'css': [],
