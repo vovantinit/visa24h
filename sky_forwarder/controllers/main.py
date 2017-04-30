@@ -13,6 +13,8 @@ class GiaoNhanModule(http.Controller):
             return http.request.redirect("/web/login?redirect=giao_nhan")
 
         Models = http.request.env['sky.forwarder']
+        # group_forwarder_nhan_vien
+        # group_forwarder_user
         is_manager = http.request.env['res.users'].has_group('sky_forwarder.group_forwarder_user')
 
         user_ids = http.request.env.ref('sky_forwarder.group_forwarder_nhan_vien').users

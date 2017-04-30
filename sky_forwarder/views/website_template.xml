@@ -219,6 +219,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body" style="text-align: center;">
                             <form t-attf-action="/ghichu?record_id=#{str(data.id)}" method="POST" >
+                                <input type="textarea" class="form-control" rows="3" value="1" name="comment233" />
                                 <input type="textarea" class="form-control" t-attf-value="#{data.note_v2}" rows="3" name="comment" />
                                 <button type="submit" class="btn btn-primary" style="float: right;margin-top: 2px;">Lưu</button>
                             </form>
