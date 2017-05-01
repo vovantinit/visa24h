@@ -33,6 +33,7 @@
                             <field name="order_ids" widget="many2many_tags" attrs="{'readonly': [('invoice_id', '!=', False)]}"/>
                             <field name="s_date" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}"/>
                             <field name="s_datetime" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}"/>
+                            <field name="he_so" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="value" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}" />
                             <field name="forwarder_cost" />
                             <field name="from_location_id" attrs="{'readonly': ['|', ('payment_id', '!=', False), ('invoice_id', '!=', False)]}"/>

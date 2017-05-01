@@ -75,6 +75,9 @@ class GiaoNhanModule(http.Controller):
         if post.get('comment', False):
             Models = http.request.env['sky.forwarder']
             res = Models.browse(int(post.get('record_id', False)))
-            res.write({'note_v2': u'{}'.format(post.get('comment', ''))})
+            res.write({
+                'note_v2': u'{}'.format(post.get('comment', '')),
+                'he_so': int(post.get('he_so', 1)),
+            })
 
         return http.request.redirect("/giao_nhan")

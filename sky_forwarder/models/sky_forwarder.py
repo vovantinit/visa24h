@@ -44,14 +44,14 @@ class Forwarder(models.Model):
     _inherit = ['mail.thread']
     _order = 's_date desc'
 
-    @api.depends('from_location_id', 'to_location_id')
+    @api.depends('from_location_id', 'to_location_id', 'he_so')
     def compute_forwarder_cost(self):
         if self.from_location_id and self.to_location_id:
             location_cost = self.env['sky.location.cost'].search([('from_location_id', '=', self.from_location_id.id), ('to_location_id', '=', self.to_location_id.id)], limit=1)
             if not location_cost:
                 raise ValidationError(_('Chi phí chưa được thiết lập!'))
             if location_cost:
-                self.forwarder_cost = location_cost.value
+                self.forwarder_cost = location_cost.value * self.he_so
         else:
             self.forwarder_cost = 0
 
@@ -162,6 +162,7 @@ class Forwarder(models.Model):
     sequence        = fields.Integer('sequence', compute='_sky_compute_sequence', store=True)
     note_v2         = fields.Text('Ghi chú của NV giao nhận')
 
+    he_so           = fields.Integer('Hệ số', default=1, track_visibility='onchange')
 
     _defaults = {
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),

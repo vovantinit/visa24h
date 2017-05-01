@@ -95,7 +95,7 @@
         </tbody>
     </table>
 
-    <div style="text-align: right;" >
+    <!-- <div style="text-align: right;" >
         <a href="#" style="display: inline-block;
                             padding: 5px 14px;
                             background-color: #fff;
@@ -106,7 +106,8 @@
                             background-color: #fff;
                             border: 1px solid #ddd;
                             border-radius: 15px;">Sau</a>                            
-    </div>
+    </div> -->
+
 <!-- <ul id="newStuff" class="nav nav-tabs nav-stacked"> -->
 
 <t t-foreach="datas" t-as="data">
@@ -158,12 +159,19 @@
             </div>
 
             <div>
+
+                <t t-if="is_manager and not data.delivered" >
+                    <form style="float: left; margin-left: 5px;">
+                        <button type="button" data-toggle="collapse" t-att-data-target="'#gan_giao_nhan' + str(data.id)" class="btn btn-primary" >Gán</button>
+                    </form>
+                </t>
+
                 <t t-if="not is_manager and not data.delivered and not data.forwarder_id" >
                     <form t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;record_type=set&amp;to_id=#{user}" method="POST" style="float: left; margin-left: 5px;" >
                         <button type="submit" class="btn btn-primary" >Nhận</button>
                     </form>
                 </t>
-                <t t-if="not data.delivered and data.forwarder_id and data.forwarder_id.id == user" >
+                <t t-if="not is_manager and not data.delivered and data.forwarder_id and data.forwarder_id.id == user" >
                     <form t-attf-action="/gan_giao_nhan?record_id=#{str(data.id)}&amp;record_type=del" method="POST" style="float: left; margin-left: 5px;">
                         <button type="submit" class="btn btn-primary" >Không nhận</button>
                     </form>
@@ -181,13 +189,7 @@
                         <button type="submit" class="btn btn-primary" >Chưa giao</button>
                     </form>
                     
-                </t>                    
-
-                <t t-if="is_manager and not data.delivered and not data.forwarder_id" >
-                    <form style="float: left; margin-left: 5px;">
-                        <button type="button" data-toggle="collapse" t-att-data-target="'#gan_giao_nhan' + str(data.id)" class="btn btn-primary" >Gán</button>
-                    </form>
-                </t>
+                </t>                                    
 
                 <t t-if="data.forwarder_id and data.forwarder_id.id == user" >
                     <form style="float: left; margin-left: 5px;">
@@ -217,10 +219,12 @@
                 <!-- Ghi chu cho nhan vien giao nhan -->
                 <div class="collapse" t-attf-id="ghichu#{data.id}" >
                     <div class="panel panel-default">
-                        <div class="panel-body" style="text-align: center;">
+                        <div class="panel-body">
                             <form t-attf-action="/ghichu?record_id=#{str(data.id)}" method="POST" >
-                                <input type="textarea" class="form-control" rows="3" value="1" name="comment233" />
-                                <input type="textarea" class="form-control" t-attf-value="#{data.note_v2}" rows="3" name="comment" />
+                                <label t-attf-for="he_so" style="margin-bottom: -3px; margin-top: 5px;" >Hệ số:</label>
+                                <input type="textarea" class="form-control" rows="3" t-attf-value="#{data.he_so}" name="he_so" />
+                                <label t-attf-for="comment" style="margin-bottom: -3px; margin-top: 5px;" >Ghi chú:</label>
+                                <input type="textarea" class="form-control" t-attf-value="#{data.note_v2}" rows="3" name="comment"/>
                                 <button type="submit" class="btn btn-primary" style="float: right;margin-top: 2px;">Lưu</button>
                             </form>
                         </div>
