@@ -30,12 +30,15 @@ class GiaoNhanModule(http.Controller):
                 'sl_giao': Models.search_count([('s_date','=',str(date.today())),('forwarder_id','=',nv.id),('delivered','=',True)]),
             })
 
+        offset = (int(post.get('page', 1)) - 1) * 2
+
         return http.request.render('sky_forwarder.index', {
             'user': http.request.env.user.id,
             'user_ids': user_ids,
-            'datas': Models.search(domain, order=order, limit=20),
+            'datas': Models.search(domain, order=order, limit=2, offset=offset),
             'is_manager': is_manager,
             'thong_ke': thong_ke,
+            'page': post.get('page', 1),
         })
 
 
