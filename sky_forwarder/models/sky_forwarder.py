@@ -132,6 +132,14 @@ class Forwarder(models.Model):
             else:
                 record.sequence = 2
 
+    @api.onchange('delivered')
+    def sky_change_delivered(self):
+        for record in self:
+            if record.delivered:
+                record.real_time = fields.Datetime.now()
+            else:
+                record.real_time = False
+
     name            = fields.Char('Name', required=True, copy=False, readonly=True, size=10)
     # partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)], compute='_compute_partner_id', store=True)
     partner_id      = fields.Many2one('res.partner',string='Customer', domain=[('customer','=',True)])
