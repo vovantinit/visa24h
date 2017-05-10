@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data noupdate="1">
+
+    <record id="loai_ho_so_v01" model="so.loai_ho_so">
+        <field name="name">Hộ chiếu</field>
+        <field name="name_v2">Passport</field>
+    </record>
+    <record id="loai_ho_so_v02" model="so.loai_ho_so">
+        <field name="name">Chứng minh nhân dân/ Căn cước công dân</field>
+        <field name="name_v2">Personal Identity card</field>
+    </record>
+    <record id="loai_ho_so_v03" model="so.loai_ho_so">
+        <field name="name">Hình thẻ theo kích thước chuẩn</field>
+        <field name="name_v2">ID size photo</field>
+    </record>
+    <record id="loai_ho_so_v04" model="so.loai_ho_so">
+        <field name="name">Sơ yếu lý lịch</field>
+        <field name="name_v2">Personal profile</field>
+    </record>
+    <record id="loai_ho_so_v05" model="so.loai_ho_so">
+        <field name="name">Sổ hộ khẩu</field>
+        <field name="name_v2">Household registration book</field>
+    </record>
+    <record id="loai_ho_so_v06" model="so.loai_ho_so">
+        <field name="name">Giấy khai sinh</field>
+        <field name="name_v2">Birth certificate</field>
+    </record>
+    <record id="loai_ho_so_v07" model="so.loai_ho_so">
+        <field name="name">Giấy đăng kí kết hôn/ Ly hôn/ Độc thân</field>
+        <field name="name_v2">Marriage certificate/ Divorce record/ Single status certificate</field>
+    </record>
+    <record id="loai_ho_so_v08" model="so.loai_ho_so">
+        <field name="name">Giấy chứng tử</field>
+        <field name="name_v2">Death certificate</field>
+    </record>
+    <record id="loai_ho_so_v09" model="so.loai_ho_so">
+        <field name="name">Hợp đồng hợp tác, mua bán, chứng từ</field>
+        <field name="name_v2">Agreement of cooperation, business contract, invoice, ...</field>
+    </record>
+    <record id="loai_ho_so_v10" model="so.loai_ho_so">
+        <field name="name">Sổ tiết kiệm</field>
+        <field name="name_v2">Saving account records</field>
+    </record>
+    <record id="loai_ho_so_v11" model="so.loai_ho_so">
+        <field name="name">Giấy xác nhận số dư</field>
+        <field name="name_v2">Account balance</field>
+    </record>
+    <record id="loai_ho_so_v12" model="so.loai_ho_so">
+        <field name="name">Sao kê tài khoản ngân hàng/ Bảng lương</field>
+        <field name="name_v2">Bank statements</field>
+    </record>
+    <record id="loai_ho_so_v13" model="so.loai_ho_so">
+        <field name="name">Giấy bảo lãnh tài chính</field>
+        <field name="name_v2">Financial-aid certificate</field>
+    </record>
+    <record id="loai_ho_so_v14" model="so.loai_ho_so">
+        <field name="name">Giấy tờ nhà đất, xe hơi, hợp đồng mua bán, chuyển nhượng cổ phần, ...</field>
+        <field name="name_v2">Properties ownership certificate, agreement of stock-swap, ...</field>
+    </record>
+    <record id="loai_ho_so_v15" model="so.loai_ho_so">
+        <field name="name">Thư mời/ Thư bảo lãnh</field>
+        <field name="name_v2">Invitation/ Guarantee letter</field>
+    </record>
+    <record id="loai_ho_so_v16" model="so.loai_ho_so">
+        <field name="name">Xác nhận công việc người mời</field>
+        <field name="name_v2">Job verification</field>
+    </record>
+    <record id="loai_ho_so_v17" model="so.loai_ho_so">
+        <field name="name">Xác nhận khả năng chi trả của người mời</field>
+        <field name="name_v2">Payment guarantee confirmation</field>
+    </record>
+    <record id="loai_ho_so_v18" model="so.loai_ho_so">
+        <field name="name">Sao kê tài khoản ngân hàng người mời</field>
+        <field name="name_v2">Bank statements/ Account balance</field>
+    </record>
+    <record id="loai_ho_so_v19" model="so.loai_ho_so">
+        <field name="name">Bản sao Hộ chiếu/ Visa người mời</field>
+        <field name="name_v2">Copy of Passport/ Visa</field>
+    </record>
+    <record id="loai_ho_so_v20" model="so.loai_ho_so">
+        <field name="name">Ảnh chứng minh mối quan hệ</field>
+        <field name="name_v2">Proofs of Relationship (Photos)</field>
+    </record>
+   
+</data>
+</openerp>

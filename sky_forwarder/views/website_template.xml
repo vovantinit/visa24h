@@ -152,6 +152,14 @@
         <div class="panel panel-default">              
             <div class="panel-body">
                 <div>
+                    <strong>Người đề nghị:</strong>   
+                    <span t-field="data.user_id" />
+                </div>
+                <div>
+                    <strong>Ngày đăng:</strong>   
+                    <span t-field="data.create_date" />
+                </div>
+                <div>
                     <strong>Chi phí giao nhận:</strong>   
                     <span t-field="data.forwarder_cost" />
                 </div>

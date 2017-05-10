@@ -162,7 +162,7 @@ class Forwarder(models.Model):
     sequence        = fields.Integer('sequence', compute='_sky_compute_sequence', store=True)
     note_v2         = fields.Text('Ghi chú của NV giao nhận')
 
-    he_so           = fields.Integer('Hệ số', default=1, track_visibility='onchange')
+    he_so           = fields.Integer('Hệ số', default=1)
 
     _defaults = {
         'name': lambda self, cr, uid, context={}: self.pool.get('ir.sequence').get(cr, uid, 'sky.forwarder.code'),

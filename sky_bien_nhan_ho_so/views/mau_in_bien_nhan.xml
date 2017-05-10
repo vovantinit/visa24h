@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <template id="report_biennhan_style" inherit_id="report.style">
+        <xpath expr=".">
+            <t>
+              
+                .canh_giua_dong > td, .canh_giua_dong > td {
+                    vertical-align: middle !important;
+                    padding: 0px 8px !important;
+                }
+                .top_giam3 {
+                    margin-top: -3px !important;
+                }
+            </t>
+        </xpath>
+    </template>
+
+    <template id="mau_in_bien_nhan">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <!-- <br></br> -->
+                        <br></br>
+                        <h3 class="text-center" style="margin-top: -10px;"><strong>BIÊN NHẬN HỒ SƠ</strong></h3>
+                        <h5 class="text-center" style="margin-top: -10px;">(Visa Application Package Acknowledgement)</h5>
+                        <h5 class="text-center">(Vui lòng in 2 bản, khách hàng giữ một bản, nhân viên giữ một bản)</h5>
+                        <h5 class="text-center" style="margin-top: -10px;">(Please make two hard copies, customer holds a copy, staff hold the original)</h5>
+                        <table class="table table-bordered">
+                            <tbody>
+                                
+                                <tr  class="canh_giua_dong" >
+                                    <td class="">
+                                        <div><strong>Họ và tên khách hàng:</strong></div>
+                                        <div class="top_giam3">Name of customer:</div>
+                                    </td>
+                                    <td class="" >
+                                        <span t-field="o.b2_customer_name" />
+                                    </td>
+                                    <td class="">
+                                        <div><strong>Loại hồ sơ:</strong></div>
+                                        <div class="top_giam3">Category:</div>
+                                    </td>
+                                    <td class="" >
+                                        <span t-field="o.b2_loai_ho_so" /></td>
+                                </tr>
+
+                                <tr  class="canh_giua_dong" >
+                                    <td class="" >
+                                        <div>
+                                            <strong>Địa chỉ thư điện tử:</strong>
+                                        </div>
+                                        <div class="top_giam3">Email:</div>
+                                    </td>
+                                    <td class="col-xs-3 " >
+                                        <span t-field="o.b2_email" />
+                                    </td>
+                                    <td class="col-xs-3 ">
+                                        <div>
+                                            <strong>Nhân viên nhận hồ sơ:</strong>
+                                        </div>
+                                        <div class="top_giam3">Name of Staff:</div>
+                                    </td>
+                                    <td class="col-xs-3" ><span t-field="o.user_id" /></td>
+                                </tr>
+
+                                <tr  class="canh_giua_dong">
+                                    <td>
+                                        <strong>Số điện thoại:</strong><br></br>Mobile phone:</td>
+                                    <td class="col-xs-3" ><span t-field="o.b2_phone" /></td>
+                                    <td class="col-xs-3"><strong>Thời gian nhận:</strong><br>Time:</br></td>
+                                    <td class="col-xs-3" ><span t-field="o.b2_ngay_nhan" /> <span t-field="o.b2_thoi_gian" t-field-options='{"widget": "float_time"}' /></td>
+                                </tr>
+
+                                <tr  class="canh_giua_dong">
+                                    <td style="width: 20%;"><strong>Địa chỉ liên hệ:</strong><br></br>Address:</td>
+                                    <td class="col-xs-3" ><span t-field="o.b2_address" /></td>
+                                    <td class="col-xs-3"><strong>Tình trạng:</strong><br>Status:</br></td>
+                                    <td class="col-xs-3" ><span t-field="o.b2_tinh_trang_ho_so" /></td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="canh_giua_dong">
+                                    <th class="col-xs-1 text-center" style="font-weight: normal;"><strong>STT</strong><br></br>(No.)</th>
+                                    <th class="col-xs-5 text-center" style="font-weight: normal;"><strong>CÁC LOẠI HỒ SƠ, CHỨNG TỪ</strong><br></br>(Documents)</th>
+                                    <th class="col-xs-1 text-center" style="font-weight: normal;"><strong>GỐC</strong><br></br>(Org.)</th>
+                                    <th class="col-xs-1 text-center" style="font-weight: normal;"><strong>S.LƯỢNG</strong><br></br>(Q.)</th>
+                                    <th class="col-xs-1 text-center" style="font-weight: normal;"><strong>NHẬN</strong><br></br>(Rec.)</th>
+                                    <th class="col-xs-1 text-center" style="font-weight: normal;"><strong>TRẢ</strong><br></br>(Re.)</th>
+                                    <th class="col-xs-2 text-center" style="font-weight: normal;"><strong>GHI CHÚ</strong><br></br>(Notes)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="stt" t-value="0"/>
+                                <tr t-foreach="o.ho_so_ids" t-as="l" class="canh_giua_dong">
+                                    <t t-set="stt" t-value="stt+1"/>
+                                    <td class="col-xs-1 text-center" ><t t-esc="stt" /></td>
+                                    <td class="col-xs-5" >
+                                        <span t-field="l.ho_so_id.name" />
+                                        <br></br>
+                                        <span t-field="l.ho_so_id.name_v2" />
+                                    </td>
+                                    <td class="col-xs-1 text-center" >
+                                        <t t-if="l.goc">
+                                            <i class="fa fa-check" />
+                                        </t>
+                                    </td>
+                                    <td class="col-xs-1 text-center" >
+                                        <span t-field="l.sl" />
+                                    </td>
+                                    <td class="col-xs-1 text-center" >
+                                        <t t-if="l.nhan">
+                                            <i class="fa fa-check" />
+                                        </t>
+                                    </td>
+                                    <td class="col-xs-1 text-center" >
+                                        <t t-if="l.tra">
+                                            <i class="fa fa-check" />
+                                        </t>
+                                    </td>
+                                    <td class="col-xs-2 text-center" >
+                                        <span t-field="l.ghichu" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <span t-field="o.b2_note" />
+
+                        <div class="row" >
+                            <div class="col-xs-6 text-center" >
+                                <p>Chữ ký nhân viên nhận hồ sơ/ Officer signature</p>
+                            </div>
+                            <div class="col-xs-6 text-center" >
+                                <p>Chữ ký khách hàng/ Customer signature</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report 
+            id="report_bien_nhan_ho_so"
+            string="Biên nhận hồ sơ"
+            model="sale.order" 
+            report_type="qweb-pdf"
+            file="sky_bien_nhan_ho_so.mau_in_bien_nhan" 
+            name="sky_bien_nhan_ho_so.mau_in_bien_nhan" 
+        />
+
+</data>
+</openerp>

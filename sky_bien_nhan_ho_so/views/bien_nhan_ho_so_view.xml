@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <!-- website_quote.sale_order_form_quote -->
+    <record id="sky_sale_order_form_quote" model="ir.ui.view">
+        <field name="name">sky.sale.order.form.payment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="website_quote.sale_order_form_quote" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='options']/.." position="replace" >
+                <page name="bien_nhan_ho_so" string="Biên nhận hồ sơ" >
+                    <button name="in_mau_bien_nhan_ho_so" string="In biên nhận hồ sơ" type="object" class="text-right" />
+                    <button name="lay_thong_tin_mau" string="Lấy thông tin mẫu" confirm="Bạn xác nhận muốn ghi lại nội dung của Biên nhận hồ sơ theo thông tin đơn hàng?" type="object" class="text-right" />
+                    <group>
+                        <group>
+                            <field name="b2_customer_name" />
+                            <field name="b2_email" />
+                            <field name="b2_phone" />
+                            <field name="b2_address" />
+                        </group>
+                        <group>
+                            <field name="b2_loai_ho_so" />
+                            <field name="b2_tinh_trang_ho_so" />
+                            <field name="b2_ngay_nhan" />
+                            <field name="b2_thoi_gian" widget="float_time" />
+                        </group>
+                    </group>
+                    <field name="ho_so_ids" >
+                        <tree edit="1" editable="bottom" >
+                            <field name="ho_so_id" />
+                            <field name="goc" />
+                            <field name="sl" />
+                            <field name="nhan" />
+                            <field name="tra" />
+                            <field name="ghichu" />
+                        </tree>
+                    </field>
+                    <label for="b2_note" string="Ghi chú khác" />
+                    <field name="b2_note" />
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</data>
+</openerp>
