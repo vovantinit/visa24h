@@ -45,7 +45,8 @@
                                         <div class="top_giam3">Category:</div>
                                     </td>
                                     <td class="" >
-                                        <span t-field="o.b2_loai_ho_so" /></td>
+                                        <span t-field="o.b2_loai_ho_so" />
+                                    </td>
                                 </tr>
 
                                 <tr  class="canh_giua_dong" >
@@ -69,10 +70,21 @@
 
                                 <tr  class="canh_giua_dong">
                                     <td>
-                                        <strong>Số điện thoại:</strong><br></br>Mobile phone:</td>
+                                        <div>
+                                            <strong>Số điện thoại:</strong>
+                                        </div>
+                                        <div class="top_giam3">Mobile phone:</div>
+                                    </td>
                                     <td class="col-xs-3" ><span t-field="o.b2_phone" /></td>
-                                    <td class="col-xs-3"><strong>Thời gian nhận:</strong><br>Time:</br></td>
-                                    <td class="col-xs-3" ><span t-field="o.b2_ngay_nhan" /> <span t-field="o.b2_thoi_gian" t-field-options='{"widget": "float_time"}' /></td>
+                                    <td class="col-xs-3">
+                                        <div>
+                                            <strong>Thời gian nhận:</strong>
+                                        </div>
+                                        <div class="top_giam3">Time:</div>
+                                    </td>
+                                    <td class="col-xs-3" >
+                                        <span t-field="o.b2_ngay_nhan" /> <t t-esc="'%02d:%02d' % (int(o.b2_thoi_gian), o.b2_thoi_gian * 60 % 60)" />
+                                    </td>
                                 </tr>
 
                                 <tr  class="canh_giua_dong">
