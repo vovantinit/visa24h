@@ -251,7 +251,9 @@
         <field name="arch" type="xml">
             <notebook position="inside" >
                 <page string="Nhân viên giao nhận" >
-                    <field name="location_ids" widget="many2many_tags" />
+                    <group>
+                        <field name="location_ids" widget="many2many_tags" />
+                    </group>
                 </page>
             </notebook>
         </field>

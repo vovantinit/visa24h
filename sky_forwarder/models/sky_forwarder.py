@@ -11,7 +11,7 @@ import datetime
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    location_ids = fields.Many2many('sky.location', 'sky_users_location_rel', 'user_id', 'location_id', string='Địa điểm')
+    location_ids    = fields.Many2many('sky.location', 'sky_users_location_rel', 'user_id', 'location_id', string='Địa điểm', domain=[('is_start','=',True)])
 
 class SkyLocation(models.Model):
     _name = 'sky.location'

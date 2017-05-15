@@ -13,8 +13,9 @@ class GiaoNhanModule(http.Controller):
             return http.request.redirect("/web/login?redirect=giao_nhan")
 
         Models = http.request.env['sky.forwarder']
-        is_manager = http.request.env['res.users'].has_group('sky_forwarder.group_forwarder_user')
-        user_ids = http.request.env.ref('sky_forwarder.group_forwarder_nhan_vien').users
+        UserModel = http.request.env['res.users']
+        is_manager = UserModel.has_group('sky_forwarder.group_forwarder_user')
+        user_ids = http.request.env.ref('sky_forwarder.group_forwarder_nhan_vien').users.filtered(lambda r: not UserModel.sudo(r.id).has_group('sky_forwarder.group_forwarder_manager'))
 
         # domain = ['|', ('forwarder_id', 'in', (False, http.request.env.user.id)), (is_manager, '=', True)]
         # domain = [('forwarder_id', 'in', (False, http.request.env.user.id))]
