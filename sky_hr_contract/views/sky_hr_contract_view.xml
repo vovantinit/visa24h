@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <record id="sky_hr_contract_form_view_inherit" model="ir.ui.view">
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="visa_tinhluong.visa_tinhluong_hr_contract_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type_id" position="after">
+                <field name="active" />
+            </field>
+            <field name="luongdoanhso" position="replace">
+                <field name="luong_doanh_so" />
+                <field name="thuong" />
+                <field name="tang_ca" />
+            </field>
+            <xpath expr="//form/sheet" position="after">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>   
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sky_hr_contract_view_search_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.view.search</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="after">
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>
