@@ -44,7 +44,6 @@ class SkyForeCast(models.Model):
             if confirm_real:
                 record.monthly_confirmed = confirm_real[0]['vnd_amount_untaxed']
 
-
     team_id     = fields.Many2one('crm.case.section', 'Đội bán hàng')
     period_id   = fields.Many2one('account.period', 'Tháng')
     date_start  = fields.Date(related='period_id.date_start', store=True, readonly=True)
@@ -53,9 +52,9 @@ class SkyForeCast(models.Model):
     invoiced_target     = fields.Float('Mục tiêu đơn hàng', digits=(20, 0))
     invoiced_forecast   = fields.Float('Đơn hàng dự kiến', digits=(20, 0))
 
-    monthly_quoted      = fields.Float('Báo gía thực tế', digits=(20, 0), compute='_sky_compute_all_value')
-    monthly_confirmed   = fields.Float('Đơn hàng thực tế', digits=(20, 0), compute='_sky_compute_all_value')
-    monthly_invoiced    = fields.Float('Hóa đơn thực tế', digits=(20, 0), compute='_sky_compute_all_value')
+    monthly_quoted      = fields.Float('Báo gía thực tế', digits=(20, 0))
+    monthly_confirmed   = fields.Float('Đơn hàng thực tế', digits=(20, 0))
+    monthly_invoiced    = fields.Float('Hóa đơn thực tế', digits=(20, 0))
 
 SkyForeCast()
 
