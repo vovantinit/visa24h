@@ -30,8 +30,6 @@ try:
 except ImportError:
     xlwt = None
 
-
-
 class AdvanceExport(http.Controller):
 
     def tgl_write_excel(self, worksheet, rows, col, value):
@@ -137,3 +135,235 @@ class AdvanceExport(http.Controller):
                     ('Content-Disposition', 'attachment; filename=%s.xls' % filename)])
         workbook.save(response.stream)
         return response
+
+    @http.route(['/skyerp/account_report_partner_balance'], type='http', auth="user")
+    def sky_account_report_partner_balance(self, context, w_context, debug=None):        
+
+        obj_move = request.env['account.move.line']
+        used_context = json.loads(context)        
+
+        wizard_context = json.loads(w_context)
+
+        query = obj_move.with_context(used_context)._query_get(obj='l')        
+
+        ACCOUNT_TYPE = []
+        result_selection = wizard_context.get('result_selection', False)
+
+        if ( result_selection== 'customer' ):
+            ACCOUNT_TYPE = ('receivable',)
+        elif (result_selection == 'supplier'):
+            ACCOUNT_TYPE = ('payable',)
+        else:
+            ACCOUNT_TYPE = ('payable', 'receivable')
+
+        move_state = ['draft','posted']
+        if wizard_context.get('target_move', False) == 'posted':
+            move_state = ['posted']
+
+        request._cr.execute(
+            "SELECT p.ref,l.account_id,ac.name AS account_name,ac.code AS code,p.name, p.id p_id, sum(debit) AS debit, sum(credit) AS credit, " \
+                    "CASE WHEN sum(debit) > sum(credit) " \
+                        "THEN sum(debit) - sum(credit) " \
+                        "ELSE 0 " \
+                    "END AS sdebit, " \
+                    "CASE WHEN sum(debit) < sum(credit) " \
+                        "THEN sum(credit) - sum(debit) " \
+                        "ELSE 0 " \
+                    "END AS scredit, " \
+                    "(SELECT sum(debit-credit) " \
+                        "FROM account_move_line l " \
+                        "WHERE partner_id = p.id " \
+                            "AND " + query + " " \
+                            "AND blocked = TRUE " \
+                    ") AS enlitige " \
+            "FROM account_move_line l LEFT JOIN res_partner p ON (l.partner_id=p.id) " \
+            "JOIN account_account ac ON (l.account_id = ac.id)" \
+            "JOIN account_move am ON (am.id = l.move_id)" \
+            "WHERE ac.type IN %s " \
+            "AND am.state IN %s " \
+            "AND " + query + "" \
+            "GROUP BY p.id, p.ref, p.name,l.account_id,ac.name,ac.code " \
+            "ORDER BY l.account_id,p.name",
+            (ACCOUNT_TYPE, tuple(move_state)))
+        res = request._cr.dictfetchall()
+
+        full_account = []
+
+        if wizard_context.get('display_partner', False) == 'non-zero_balance':
+            full_account = [r for r in res if r['sdebit'] > 0 or r['scredit'] > 0]
+        else:
+            full_account = [r for r in res]        
+
+        ll = []
+        w_filter = wizard_context.get('filter', False)
+        if w_filter != 'filter_no':
+            min_date = wizard_context.get('min_date', False)
+            
+            new_context = {
+                'journal_ids': used_context['journal_ids'],
+                'state': used_context['state'],
+            }
+
+            new_query = obj_move.with_context(new_context)._query_get(obj='l')
+            
+            request._cr.execute(
+                "SELECT p.ref,l.account_id,ac.name AS account_name,ac.code AS code,p.id p_id,p.name, sum(debit) AS debit, sum(credit) AS credit " \
+
+                "FROM account_move_line l LEFT JOIN res_partner p ON (l.partner_id=p.id) " \
+                "JOIN account_account ac ON (l.account_id = ac.id)" \
+                "JOIN account_move am ON (am.id = l.move_id)" \
+                "WHERE ac.type IN %s " \
+                "AND am.state IN %s " \
+                "AND l.date < %s " \
+                "AND " + new_query + "" \
+                "GROUP BY p.id, p.ref, p.name,l.account_id,ac.name,ac.code " \
+                "ORDER BY l.account_id,p.name",
+                (ACCOUNT_TYPE, tuple(move_state), min_date))
+            res2 = request._cr.dictfetchall()
+
+            ll = {i['p_id']: i for i in res2}
+        for rec in full_account:
+            rec.update({
+                'old_credit': 0 if rec['p_id'] not in ll else ll[rec['p_id']]['credit'],  
+                'old_debit': 0 if rec['p_id'] not in ll else ll[rec['p_id']]['debit']    
+            })
+            if not rec.get('name', False):
+                rec.update({'name': 'Unknown Partner'})
+
+        # Xu ly Excel 
+        filename = u'So du cua doi tac'
+
+        workbook    = xlwt.Workbook()
+        worksheet   = workbook.add_sheet(filename)
+        header_style = xlwt.easyxf("font: bold on, height 200;")
+        center_style = xlwt.easyxf("alignment: horizontal centre, vertical centre;")
+        bold_center = xlwt.easyxf("font: bold on, height 200; alignment: horizontal centre, vertical centre;")
+
+        date_range = ''
+        if w_filter == 'filter_date':
+            date_from = used_context.get('date_from', '')
+            date_to = used_context.get('date_to', '')
+            if len(date_from):
+                date_from = u'{}-{}-{}'.format(date_from[-2:], date_from[-5:-3], date_from[:4])
+            if date_to:
+                date_to = u'{}-{}-{}'.format(date_to[-2:], date_to[-5:-3], date_to[:4])
+            date_range = u'{} - {}'.format(date_from, date_to)
+        elif w_filter == 'filter_period':
+            Period = request.env['account.period']
+            period_from = used_context.get('period_from', 0)
+            period_to = used_context.get('period_to', 0)
+            if period_from:
+                period_from = Period.browse(period_from).display_name
+            else:
+                period_from = ''
+            if period_to:
+                period_to = Period.browse(period_to).display_name
+            else:
+                period_to = ''
+            date_range = u'{} - {}'.format(period_from, period_to)
+
+        loai_tai_khoan = {
+            'customer': u'Phải thu',
+            'supplier': u'Phải trả',
+            'customer_supplier': u'Phải thu và phải trả'
+        }
+
+        target_move = u'Tất cả bút toán'
+
+        if wizard_context.get('target_move', False) == 'posted':
+            target_move = u'Tất cả bút toán đã vào sổ'
+
+        worksheet.write(1, 1, u'Đối tượng : {}'.format(target_move))
+        worksheet.write(2, 1, u'Loại tài khoản: {}'.format(loai_tai_khoan[result_selection]))
+        worksheet.write(3, 1, u'Thời gian: ' + date_range)
+
+        for header_index in xrange(11):
+            worksheet.col(header_index).width_mismatch = True
+            if header_index == 0:
+                worksheet.col(header_index).width = 256 * 7
+            elif header_index == 1:
+                worksheet.col(header_index).width = 256 * 50
+            else:
+                worksheet.col(header_index).width = 256 * 15
+
+        rows = 5
+        codes = []
+
+        worksheet.write_merge(rows-1, rows-1, 2, 4, u'Đầu kì', bold_center)
+        worksheet.write_merge(rows-1, rows-1, 5, 7, u'Phát sinh', bold_center)
+        worksheet.write_merge(rows-1, rows-1, 8, 10, u'Cuối kì', bold_center)
+
+        headers = [u'Mã', u'Tên (Tài khoản/Đối tác) ', u'Nợ', u'Có', u'Số dư', u'Nợ', u'Có', u'Số dư', u'Nợ', u'Có', u'Số dư']
+        for header_index, header_name in enumerate(headers):
+            worksheet.write(rows, header_index, header_name, header_style)
+
+        # Tong cua tat ca
+        rows += 1
+        worksheet.write(rows, 0, u'Tổng', header_style)
+        c_old_debit = sum(r['old_debit'] for r in full_account)
+        c_old_credit = sum(r['old_credit'] for r in full_account)
+
+        c_debit = sum(r['debit'] for r in full_account)
+        c_credit = sum(r['credit'] for r in full_account)
+
+        worksheet.write(rows, 2, c_old_debit, header_style)
+        worksheet.write(rows, 3, c_old_credit, header_style)
+        worksheet.write(rows, 4, c_old_debit - c_old_credit, header_style)
+
+        worksheet.write(rows, 5, c_debit, header_style)
+        worksheet.write(rows, 6, c_credit, header_style)
+        worksheet.write(rows, 7, c_debit - c_credit, header_style)
+
+        worksheet.write(rows, 8, c_old_debit + c_debit, header_style)
+        worksheet.write(rows, 9, c_old_credit + c_credit, header_style)
+        worksheet.write(rows, 10, c_old_debit - c_old_credit + c_debit - c_credit, header_style)
+
+        for rec in full_account:
+            if rec['code'] not in codes:
+                rows += 1
+                if len(codes):
+                    rows += 2
+                worksheet.write(rows, 0, rec['code'])
+                worksheet.write(rows, 1, rec['account_name'], header_style)
+                c_old_debit = sum(r['old_debit'] for r in full_account if r['code'] == rec['code'])
+                c_old_credit = sum(r['old_credit'] for r in full_account if r['code'] == rec['code'])
+
+                c_debit = sum(r['debit'] for r in full_account if r['code'] == rec['code'])
+                c_credit = sum(r['credit'] for r in full_account if r['code'] == rec['code'])
+
+                worksheet.write(rows, 2, c_old_debit, header_style)
+                worksheet.write(rows, 3, c_old_credit, header_style)
+                worksheet.write(rows, 4, c_old_debit - c_old_credit, header_style)
+
+                worksheet.write(rows, 5, c_debit, header_style)
+                worksheet.write(rows, 6, c_credit, header_style)
+                worksheet.write(rows, 7, c_debit - c_credit, header_style)
+
+                worksheet.write(rows, 8, c_old_debit + c_debit, header_style)
+                worksheet.write(rows, 9, c_old_credit + c_credit, header_style)
+                worksheet.write(rows, 10, c_old_debit - c_old_credit + c_debit - c_credit, header_style)
+
+                codes.append(rec['code'])                
+
+
+            col = 1
+            rows += 1
+            col = self.tgl_write_excel(worksheet, rows, col, rec['name'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_credit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] - rec['old_credit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['debit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['credit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['debit'] - rec['credit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] + rec['debit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_credit'] + rec['credit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] + rec['debit'] - rec['old_credit'] - rec['credit'])
+            # col = self.tgl_write_excel(worksheet, rows, col, rec['enlitige'])
+
+        response = request.make_response(None,
+            headers=[('Content-Type', 'application/vnd.ms-excel'),
+                    ('Content-Disposition', 'attachment; filename=%s.xls' % filename)])
+        workbook.save(response.stream)
+        return response
+
+        
