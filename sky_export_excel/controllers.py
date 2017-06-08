@@ -29,11 +29,15 @@ try:
     import xlwt
 except ImportError:
     xlwt = None
+from xlwt import *
 
 class AdvanceExport(http.Controller):
 
-    def tgl_write_excel(self, worksheet, rows, col, value):
-        worksheet.write(rows, col, value)
+    def tgl_write_excel(self, worksheet, rows, col, value, so_style_v2=None):
+        if so_style_v2:
+            worksheet.write(rows, col, value, so_style_v2)
+        else:
+            worksheet.write(rows, col, value)
         return col + 1
 
 
@@ -284,7 +288,7 @@ class AdvanceExport(http.Controller):
             elif header_index == 1:
                 worksheet.col(header_index).width = 256 * 50
             else:
-                worksheet.col(header_index).width = 256 * 15
+                worksheet.col(header_index).width = 256 * 20
 
         rows = 5
         codes = []
@@ -297,6 +301,16 @@ class AdvanceExport(http.Controller):
         for header_index, header_name in enumerate(headers):
             worksheet.write(rows, header_index, header_name, header_style)
 
+        so_style = XFStyle()
+        so_style.num_format_str = '#,##0.00'
+        font = Font()
+        font.bold = True
+        so_style.num_format_str = '#,##0.00'
+        so_style.font = font
+
+        so_style_v2 = XFStyle()
+        so_style_v2.num_format_str = '#,##0.00'
+
         # Tong cua tat ca
         rows += 1
         worksheet.write(rows, 0, u'Tổng', header_style)
@@ -306,17 +320,17 @@ class AdvanceExport(http.Controller):
         c_debit = sum(r['debit'] for r in full_account)
         c_credit = sum(r['credit'] for r in full_account)
 
-        worksheet.write(rows, 2, c_old_debit, header_style)
-        worksheet.write(rows, 3, c_old_credit, header_style)
-        worksheet.write(rows, 4, c_old_debit - c_old_credit, header_style)
+        worksheet.write(rows, 2, c_old_debit, so_style)
+        worksheet.write(rows, 3, c_old_credit, so_style)
+        worksheet.write(rows, 4, c_old_debit - c_old_credit, so_style)
 
-        worksheet.write(rows, 5, c_debit, header_style)
-        worksheet.write(rows, 6, c_credit, header_style)
-        worksheet.write(rows, 7, c_debit - c_credit, header_style)
+        worksheet.write(rows, 5, c_debit, so_style)
+        worksheet.write(rows, 6, c_credit, so_style)
+        worksheet.write(rows, 7, c_debit - c_credit, so_style)
 
-        worksheet.write(rows, 8, c_old_debit + c_debit, header_style)
-        worksheet.write(rows, 9, c_old_credit + c_credit, header_style)
-        worksheet.write(rows, 10, c_old_debit - c_old_credit + c_debit - c_credit, header_style)
+        worksheet.write(rows, 8, c_old_debit + c_debit, so_style)
+        worksheet.write(rows, 9, c_old_credit + c_credit, so_style)
+        worksheet.write(rows, 10, c_old_debit - c_old_credit + c_debit - c_credit, so_style)
 
         for rec in full_account:
             if rec['code'] not in codes:
@@ -331,33 +345,33 @@ class AdvanceExport(http.Controller):
                 c_debit = sum(r['debit'] for r in full_account if r['code'] == rec['code'])
                 c_credit = sum(r['credit'] for r in full_account if r['code'] == rec['code'])
 
-                worksheet.write(rows, 2, c_old_debit, header_style)
-                worksheet.write(rows, 3, c_old_credit, header_style)
-                worksheet.write(rows, 4, c_old_debit - c_old_credit, header_style)
+                worksheet.write(rows, 2, c_old_debit, so_style)
+                worksheet.write(rows, 3, c_old_credit, so_style)
+                worksheet.write(rows, 4, c_old_debit - c_old_credit, so_style)
 
-                worksheet.write(rows, 5, c_debit, header_style)
-                worksheet.write(rows, 6, c_credit, header_style)
-                worksheet.write(rows, 7, c_debit - c_credit, header_style)
+                worksheet.write(rows, 5, c_debit, so_style)
+                worksheet.write(rows, 6, c_credit, so_style)
+                worksheet.write(rows, 7, c_debit - c_credit, so_style)
 
-                worksheet.write(rows, 8, c_old_debit + c_debit, header_style)
-                worksheet.write(rows, 9, c_old_credit + c_credit, header_style)
-                worksheet.write(rows, 10, c_old_debit - c_old_credit + c_debit - c_credit, header_style)
+                worksheet.write(rows, 8, c_old_debit + c_debit, so_style)
+                worksheet.write(rows, 9, c_old_credit + c_credit, so_style)
+                worksheet.write(rows, 10, c_old_debit - c_old_credit + c_debit - c_credit, so_style)
 
                 codes.append(rec['code'])                
 
 
             col = 1
             rows += 1
-            col = self.tgl_write_excel(worksheet, rows, col, rec['name'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['old_credit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] - rec['old_credit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['debit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['credit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['debit'] - rec['credit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] + rec['debit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['old_credit'] + rec['credit'])
-            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] + rec['debit'] - rec['old_credit'] - rec['credit'])
+            col = self.tgl_write_excel(worksheet, rows, col, rec['name'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_credit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] - rec['old_credit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['debit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['credit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['debit'] - rec['credit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] + rec['debit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_credit'] + rec['credit'], so_style_v2)
+            col = self.tgl_write_excel(worksheet, rows, col, rec['old_debit'] + rec['debit'] - rec['old_credit'] - rec['credit'], so_style_v2)
             # col = self.tgl_write_excel(worksheet, rows, col, rec['enlitige'])
 
         response = request.make_response(None,
