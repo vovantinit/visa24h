@@ -19,5 +19,20 @@
         </field>
     </record>
 
+    <record id="sky_view_vendor_receipt_form" model="ir.ui.view">
+        <field name="name">sky.account.voucher.form</field>
+        <field name="model">account.voucher</field>
+        <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form" />
+        <field name="arch" type="xml">
+            <field name="line_dr_ids" position="before" >
+                <button name="sky_uncheck_line_dr_ids" states="draft" string="Bỏ chọn" type="object" />
+            </field>
+            <field name="line_cr_ids" position="before" >
+                <button name="sky_uncheck_line_cr_ids" states="draft" string="Bỏ chọn" type="object" />
+            </field>
+        </field>
+    </record>
+    
+
 </data>
 </openerp>
