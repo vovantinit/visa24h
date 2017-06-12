@@ -59,7 +59,7 @@ class AdvanceExport(http.Controller):
         header_title = [u'SỐ ĐƠN HÀNG', u'NGÀY TÍNH \nDOANH SỐ', u'KẾT QUẢ', u'NGÀY \nXÁC NHẬN', \
             u'THAM CHIẾU\n/MÔ TẢ', u'KHÁCH HÀNG', u'NHÂN VIÊN', \
             # u'GIÁ HÀNG BÁN', u'TỔNG TIỀN', u'TỶ GIÁ', \            
-            u'GIÁ BÁN \nQUY ĐỔI', u'VAT', u'TỔNG CỘNG', \
+            u'GIÁ BÁN \nQUY ĐỔI (TK 511)', u'VAT', u'TỔNG CỘNG', \
             u'TT LẦN 1', u'NGÀY', u'CHỨNG TỪ', u'TT LẦN 2', u'NGÀY', u'CHỨNG TỪ', \
             u'TT LẦN 3', u'NGÀY', u'CHỨNG TỪ', u'PHẢI THU \nCÒN LẠI', u'NHÀ CC (632)', u'PHÍ ĐỐI TÁC \n(6322)', \
             u'VẬN CHUYỂN \n(6213)', u'KHẨN (6217)', u'RỬA HÌNH \n(6219A)', u'KSK,DKTT \n(6212)', u'CHỨNG NHẬN DẤU, \nLLTP, HỢP PHÁP HÓA \n(6214)', \
@@ -80,6 +80,8 @@ class AdvanceExport(http.Controller):
 
         rows = 0
         so_ids = request.env['sale.order'].search([('x_ngaytinhdoanhso', '>=',  date_from), ('x_ngaytinhdoanhso', '<=', date_to)])
+
+        print 
 
         kq = {
             'pass': u'Đạt',
@@ -103,7 +105,7 @@ class AdvanceExport(http.Controller):
             # col = self.tgl_write_excel(worksheet, rows, col, so.amount_untaxed)
             # col = self.tgl_write_excel(worksheet, rows, col, so.amount_total)
             # col = self.tgl_write_excel(worksheet, rows, col, so.exchange_rate)
-            col = self.tgl_write_excel(worksheet, rows, col, sum(inv.vnd_amount_untaxed for inv in so.invoice_ids))
+            col = self.tgl_write_excel(worksheet, rows, col, sum(line.amount for line in so.analytic_lines if line.general_account_id.code.startswith('511')))
             col = self.tgl_write_excel(worksheet, rows, col, sum(inv.vnd_amount_tax for inv in so.invoice_ids))
             # col = self.tgl_write_excel(worksheet, rows, col, so.vnd_amount_total)
             # col = self.tgl_write_excel(worksheet, rows, col, abs(sum(line.amount for line in so.analytic_lines if line.general_account_id and line.general_account_id.code in ('5111', '5118'))))
