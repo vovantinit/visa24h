@@ -13,6 +13,7 @@ class SkyForeCast(models.Model):
 
     @api.multi
     def _sky_compute_all_value(self):
+        self.env['crm.case.section'].sky_update_forecase_value()
         Invoice_obj = self.env['account.invoice.report']
         Sale_obj    = self.env['sale.order']
         for record in self:
@@ -61,6 +62,19 @@ SkyForeCast()
 
 class crm_case_section(models.Model):
     _inherit = 'crm.case.section'
+
+    @api.model 
+    def sky_update_forecase_value(self):
+        ids = self.search([])
+        ForecastObj = self.env['sky.crm.team.forecast']
+        for record in ids:
+            dt = fields.Date.today()
+            forecast_id = ForecastObj.search([('team_id','=',record.id),('date_start','<=',dt),('date_stop','>=',dt)], limit=1)
+            if forecast_id:
+                record.write({
+                    'invoiced_target': forecast_id.invoiced_target,
+                    'invoiced_forecast': forecast_id.invoiced_forecast,
+                })
 
     @api.multi
     def _sky_compute_all_value(self):
