@@ -11,9 +11,10 @@
             <form>
                 <header>
                     <field name="payment_id" invisible="1" />
-                    <field name="invoice_id" invisible="1" />
+                    <field name="invoice_id" invisible="1" />                                            
+
                     <button name="button_cancel" states="new" string="Cancel" type="object" />
-                    <field name="state" widget="statusbar" statusbar_visible="new,set_forwarder,delivered,get_money,done" />
+                    <field name="state" widget="statusbar" statusbar_visible="new,set_forwarder,delivered,to_invoice,done" />
                 </header>
                 <sheet>
                     <div class="oe_title oe_left">
@@ -21,10 +22,13 @@
                         <h1><field name="name" /></h1>
                     </div>
                     <div class="oe_right oe_button_box" name="buttons">
-                        <button class="oe_inline oe_stat_button" type="object" name="view_payment" icon="fa-strikethrough" context="{}" string="Payment" attrs="{'invisible': [('value','&lt;',10)]}" >                            
-                        </button>
-                        <button class="oe_inline oe_stat_button" attrs="{'invisible': [('payment_id', '=', False),('value','&gt;',9)]}" type="object" name="view_invoice" icon="fa-pencil-square-o" context="{}" string="Invoice">
-                        </button>
+                    <!--     <button class="oe_inline oe_stat_button" type="object" name="view_payment" icon="fa-strikethrough" context="{}" string="Payment" attrs="{'invisible': [('value','&lt;',10)]}" >                            
+                        </button> -->
+
+                        <button name="create_invoice" class="oe_inline oe_stat_button" icon="fa-pencil-square-o" string="Tạo hóa đơn" type="object" attrs="{'invisible': ['|', ('invoice_id','!=',False),('state','!=','delivered')]}" />
+
+                        <button name="view_invoice" class="oe_inline oe_stat_button" icon="fa-pencil-square-o" string="Xem hóa đơn" type="object" attrs="{'invisible': [('invoice_id','=',False)]}" />
+                      
                     </div>
                     <group>
                         <group>
@@ -154,6 +158,16 @@
         <field name="res_model">sky.forwarder</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','!=','cancel')]</field>
+        <field name="context">{'default_user_id': uid, 'search_default_my_do': 1}</field>
+    </record> 
+
+    <record id="action_sky_forwarder_cancel" model="ir.actions.act_window">
+        <field name="name">Giao nhận hủy</field>
+        <field name="res_model">sky.forwarder</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','=','cancel')]</field>
         <field name="context">{'default_user_id': uid, 'search_default_my_do': 1}</field>
     </record> 
 
@@ -162,6 +176,7 @@
         <field name="res_model">sky.forwarder</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','!=','cancel')]</field>
         <field name="context">{'default_user_id': uid, 'search_default_null_forwarder': 1}</field>
         <field name="view_id" ref="view_sky_set_forwarder_tree" />
     </record>    

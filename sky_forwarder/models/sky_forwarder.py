@@ -61,12 +61,12 @@ class Forwarder(models.Model):
     #         vals['state'] = 'set_forwarder'
     #     return super(Forwarder, self).create(vals)
 
-    # @api.multi
-    # def write(self, vals):
-    #     if vals.get('forwarder_id', False) and len(self) == 1:
-    #         if self.state == 'new':
-    #             vals['state'] = 'set_forwarder'
-    #     return super(Forwarder, self).write(vals)
+    @api.multi
+    def write(self, vals):
+        if vals.get('he_so', False):
+            for record in self:
+                record.message_post(body=u'Hệ số: {} --> {}'.format(record.he_so, vals.get('he_so', 0)))
+        return super(Forwarder, self).write(vals)
 
 
     @api.multi
@@ -80,11 +80,14 @@ class Forwarder(models.Model):
                 state = 'set_forwarder'
                 if record.delivered:
                     state = 'delivered'
-                    if (record.payment_id and record.payment_id.state == 'posted'):
-                        state = 'get_money'
-                    if (record.value < 10 or (record.payment_id and record.payment_id.state == 'posted')) \
-                        and record.invoice_id and record.invoice_id.state == 'paid':
-                        state = 'done'
+                    # if (record.payment_id and record.payment_id.state == 'posted'):
+                        # state = 'get_money'
+                    if record.invoice_id:
+                        state = 'to_invoice'
+                        # if (record.value < 10 or (record.payment_id and record.payment_id.state == 'posted')) \
+                        #     and record.invoice_id and record.invoice_id.state == 'paid':
+                        if record.invoice_id.state == 'paid':
+                            state = 'done'
             record.state = state
 
     # @api.multi
@@ -112,7 +115,8 @@ class Forwarder(models.Model):
     state           = fields.Selection([('new', 'New'),
                                         ('set_forwarder', 'Set forwarder user'),
                                         ('delivered', 'Delivered'),
-                                        ('get_money', 'Payment paid'), 
+                                        ('to_invoice', 'Đã xuất hóa đơn'),
+                                        # ('get_money', 'Payment paid'), 
                                         ('done', 'Done'),
                                         ('cancel', 'Cancel'),], 'State', compute='_compute_state', store=True)
 
@@ -150,8 +154,8 @@ class Forwarder(models.Model):
     address         = fields.Text('Số nhà, đường', size=256, track_visibility='onchange')
     value           = fields.Float('Money amount', digit=(20, 2), track_visibility='onchange')    
 
-    from_location_id    = fields.Many2one('sky.location', 'From location', domain=[('is_start','=',True)], track_visibility='onchange')
-    to_location_id      = fields.Many2one('sky.location', 'To location', domain=[('is_start','=',False)], track_visibility='onchange')
+    from_location_id    = fields.Many2one('sky.location', 'From location', domain=[('is_start','=',True)], track_visibility='onchange', required=True)
+    to_location_id      = fields.Many2one('sky.location', 'To location', domain=[('is_start','=',False)], track_visibility='onchange', required=True)
     forwarder_cost      = fields.Float('Forwarder cost', digit=(6, 2), compute='compute_forwarder_cost', store=True)
 
     payment_id      = fields.Many2one('account.voucher', string='Customer payment')
@@ -163,7 +167,7 @@ class Forwarder(models.Model):
 
     s_date          = fields.Date('Ngày đề nghị')
     s_datetime      = fields.Char('Thời gian giao nhận', track_visibility='onchange')
-    real_time       = fields.Datetime('Thời gian thực tế', track_visibility='onchange')
+    real_time       = fields.Datetime('Thời gian giao thực tế', track_visibility='onchange')
     phone           = fields.Char('Số điện thoại')
 
     active          = fields.Boolean('Active', default=True)
@@ -208,36 +212,95 @@ class Forwarder(models.Model):
         }
 
     @api.multi
-    def view_invoice(self):
+    def create_multi_invoice(self):
+        for record in self:
+            record.create_invoice()
+
+    @api.multi
+    def create_invoice(self):
         self.ensure_one()
         if not self.forwarder_id:
-            raise ValidationError(_('The forwarder user have been not setup!'))
-        if not self.order_ids:
-            raise ValidationError(_('Not found SO!'))
+            raise ValidationError(_(u'{}: Chưa chọn nhân viên giao nhận!'.format(self.name)))
+
         if not self.forwarder_cost:
-            raise ValidationError(_('Forwarder cost have been not setup!'))
+            raise ValidationError(_(u'{}: Chưa gán chi phí giao nhận!'.format(self.name)))
+
+        # if not self.real_time:
+        #     raise ValidationError(_(u'{}: Chưa chọn thời gian giao thực tế!'.format(self.name)))
+
+        Period = self.env['account.period']
+        period_id = self._context.get('period_id', False)
+
+        # if not period_id:
+        #     dt = self.real_time[:10]
+        #     period_id = Period.search([('date_start', '<=' ,dt), ('date_stop', '>=', dt)], limit=1).id
+            
+
         product_id = self.env.ref('__export__.product_template_72')
-        price_unit = self.forwarder_cost / len(self.order_ids)
+        invoice_line_data = []
+        if not self.invoice_id:
+
+            Order = self.env['sale.order']
+            period  = Period.browse(period_id)
+            product_allocation = self.env['product.product'].search([('sky_code', '=', 'Costs Allocation')], limit=1)
+            partner_id = self.env['res.partner'].search([('sky_code', '=', 'Costs Allocation')], limit=1)
+            order_id = Order.search([('partner_id.name', 'ilike', 'PHÂN BỔ CHI PHÍ CHUNG CỦA PHÒNG'), 
+                                        ('user_id', '=', self.user_id.id),
+                                        ('x_ngaytinhdoanhso', '>=', period.date_start), ('x_ngaytinhdoanhso', '<=', period.date_stop)], limit=1)
+            if not order_id:
+                order_id = Order.create({
+                    'partner_id':   partner_id.id,
+                    'user_id':      self.user_id.id,
+                    'section_id':   self.user_id.default_section_id and self.user_id.default_section_id.id or False,
+                    'order_line':  [(0, 0, {'product_id': product_allocation.id, 
+                                            'product_uom_qty': 1, 
+                                            'product_uom': product_allocation.uom_id.id, 
+                                            'price_unit': 0})],
+                    'x_ngaytinhdoanhso':    period.date_stop,
+                })
+                order_id.signal_workflow('order_confirm')
+
+            invoice_line_data = [(0, 0, {
+                'name': self.name + ' ' + order_id.name,
+                'product_id': product_id.id,
+                'order_id': order_id.id,
+                'account_analytic_id': order_id.analytic_account_id and order_id.analytic_account_id.id or False,
+                'quantity': 1,
+                'price_unit': self.forwarder_cost,
+                'account_id': product_id.property_account_expense and product_id.property_account_expense.id or False,
+            })]
+            ctx = {
+                'default_type': 'in_invoice', 
+                'type': 'in_invoice', 
+                'journal_type': 'purchase',
+            }
+            invoice_id = self.env['account.invoice'].with_context(ctx).create({
+                'partner_id': self.forwarder_id.partner_id.id,
+                'origin': self.name,
+                'account_id': self.forwarder_id.partner_id.property_account_payable.id,
+                'invoice_line': invoice_line_data,
+                'check_total': self.forwarder_cost,
+            })
+
+            self.write({
+                'invoice_id': invoice_id.id,
+            })
+
+        return self.view_invoice()
+
+    @api.multi
+    def view_invoice(self):
         return {
             "type": "ir.actions.act_window",
             "res_model": "account.invoice",
             "views": [[self.env.ref('account.invoice_supplier_form').id, "form"]],
-            "context": {
-                'default_type': 'in_invoice', 
-                'type': 'in_invoice', 
-                'journal_type': 'purchase',
-                'default_partner_id': self.forwarder_id.partner_id.id,
-                'default_origin': self.name,
-                'default_invoice_line': [(0, 0, {
-                    'name': self.name + ' ' + order.name,
-                    'product_id': product_id.id,
-                    'order_id': order.id,
-                    'account_analytic_id': order.analytic_account_id and order.analytic_account_id.id or False,
-                    'quantity': 1,
-                    'price_unit': price_unit,
-                    'account_id': product_id.property_account_expense and product_id.property_account_expense.id or False,
-                }) for order in self.order_ids] if not self.invoice_id else [],
-            },
+            # "context": {
+            #     'default_type': 'in_invoice', 
+            #     'type': 'in_invoice', 
+            #     'journal_type': 'purchase',
+            #     'default_partner_id': self.forwarder_id.partner_id.id,
+            #     'default_origin': self.name,
+            # },
             "res_id": self.invoice_id and self.invoice_id.id or False,
         }
 
@@ -255,7 +318,10 @@ class Forwarder(models.Model):
 
     @api.multi
     def button_cancel(self):
-        self.write({'cancel': True})
+        self.write({
+            'cancel': True,
+            'he_so': 0,
+        })
 
 
 Forwarder()
@@ -276,6 +342,15 @@ class AccountVoucher(models.Model):
 
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
+
+    @api.multi 
+    @api.depends('do_ids')
+    def _sky_compute_do_id(self):
+        for record in self:
+            record.do_id = record.do_ids and record.do_ids[0].id or False
+
+    do_ids = fields.One2many('sky.forwarder', 'invoice_id', readonly=True)
+    do_id  = fields.Many2one('sky.forwarder', compute='_sky_compute_do_id', store=True)
 
     @api.model
     def create(self, vals):

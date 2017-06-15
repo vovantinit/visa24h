@@ -72,6 +72,17 @@
     Nhiệm vụ này đã được giao cho người khác.
 </div>
 
+<div class="dropdown" style="margin-left: 20px;" >
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Bộ lọc
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li t-att-class="'active' if filter_d and filter_d in ('None', 'all') else ''"><a t-att-href="'/giao_nhan?page=' + str(page)">Tất cả</a></li>
+      <li t-att-class="'active' if filter_d and filter_d in ('my') else ''"><a t-att-href="'/giao_nhan?page=' + str(page) + '&amp;filter_d=my'">Của tôi</a></li>
+      <li t-att-class="'active' if filter_d and filter_d in ('avaiable') else ''"><a t-att-href="'/giao_nhan?page=' + str(page) + '&amp;filter_d=avaiable'">Chưa phân bổ</a></li>
+    </ul>
+</div>
+
 <div class="text-center alert alert-success" t-if="success">
     <t t-if="not is_manager" >Nhận nhiệm vụ thành công.</t>
     <t t-if="is_manager" >Giao nhiệm vụ thành công.</t>
@@ -102,11 +113,13 @@
 
     <div class="text-right" >
         <ul class="pagination" style="margin: 0 0;">
-            <li id="page-1"><a href="/giao_nhan?page=1">1</a></li>
-            <li id="page-2"><a href="/giao_nhan?page=2">2</a></li>
-            <li id="page-3"><a href="/giao_nhan?page=3">3</a></li>
-            <li id="page-4"><a href="/giao_nhan?page=4">4</a></li>
-            <li id="page-5"><a href="/giao_nhan?page=5">5</a></li>
+            <li id="page-1"><a t-att-href="'/giao_nhan?page=1&amp;filter_d=' + str(filter_d)">1</a></li>
+            <li id="page-2"><a t-att-href="'/giao_nhan?page=2&amp;filter_d=' + str(filter_d)">2</a></li>
+            <li id="page-3"><a t-att-href="'/giao_nhan?page=3&amp;filter_d=' + str(filter_d)">3</a></li>
+            <li id="page-4"><a t-att-href="'/giao_nhan?page=4&amp;filter_d=' + str(filter_d)">4</a></li>
+            <li id="page-5"><a t-att-href="'/giao_nhan?page=5&amp;filter_d=' + str(filter_d)">5</a></li>
+            <li id="page-6"><a t-att-href="'/giao_nhan?page=6&amp;filter_d=' + str(filter_d)">6</a></li>
+            <li id="page-7"><a t-att-href="'/giao_nhan?page=7&amp;filter_d=' + str(filter_d)">7</a></li>
         </ul>
     </div>
 
@@ -136,6 +149,9 @@
 
         <div t-att-class="'glyphicon glyphicon-ok da_giao' + str(data.id) + (' hidden' if not data.delivered else '') " t-att-style="'margin-left: 96%;color: #337ab7;'" />
         <div>
+            <div>
+                <span t-field="data.name" /> 
+            </div>
             <div>
                 <span t-field="data.s_date" /> <span t-field="data.s_datetime" />
             </div>

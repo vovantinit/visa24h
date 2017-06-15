@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+    
+    <record id="sky_invoice_supplier_form" model="ir.ui.view">
+        <field name="name">sky.account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form" />
+        <field name="arch" type="xml">
+            <field name="reference_type" position="after" >
+                <field name="do_id" invisible="context.get('from_do', False) == False"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_forwarder_invoice_tree" model="ir.actions.act_window">
+        <field name="name">Hóa đơn</field>
+        <field name="res_model">account.invoice</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,graph</field>
+        <field eval="False" name="view_id"/>
+        <field name="domain">[('type','=','in_invoice'), ('do_id','!=',False)]</field>
+        <field name="context">{'from_do': 1}</field>
+        <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+    </record>    
+
+</data>
+</openerp>

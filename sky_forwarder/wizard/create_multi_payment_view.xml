@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="create_multi_payment_for_shipper_view">
+        <field name="name">sky.create.multi.payment</field>
+        <field name="model">sky.create.multi.payment</field>
+        <field name="arch" type="xml">
+            <form string="Month allocation">
+                <group>
+                    <group>
+                        
+                    </group>
+                </group>
+
+                <separator string="Giao nhận" />
+                <field name="ship_ids" />
+                <footer>
+                    <button name="submit" string="Đồng ý" type="object" class="oe_highlight" />
+                    or
+                    <button string="Hủy" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_create_multi_payment_for_shipper" model="ir.actions.act_window">
+        <field name="name">Tạo thanh toán hàng loạt cho giao nhận</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sky.create.multi.payment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.values" id="create_multi_payment_for_shipper_value">
+        <field name="model_id" ref="model_sky_forwarder" />
+        <field name="name">Tạo thanh toán hàng loạt cho giao nhận</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.act_window,' + str(ref('action_create_multi_payment_for_shipper'))" />
+        <field name="key">action</field>
+        <field name="model">sky.forwarder</field>
+    </record>
+
+
+</data>
+</openerp>

@@ -12,6 +12,8 @@ class GiaoNhanModule(http.Controller):
         if not http.request.env.user or http.request.env.user and http.request.env.user.id == 3:
             return http.request.redirect("/web/login?redirect=giao_nhan")
 
+        filter_d = post.get('filter_d', 'all')
+
         Models = http.request.env['sky.forwarder']
         UserModel = http.request.env['res.users']
         is_manager = UserModel.has_group('sky_forwarder.group_forwarder_user')
@@ -21,6 +23,12 @@ class GiaoNhanModule(http.Controller):
         # domain = [('forwarder_id', 'in', (False, http.request.env.user.id))]
 
         domain = []
+
+        if filter_d == 'my':
+            domain.append(('forwarder_id','=',http.request.env.user.id))
+        elif filter_d == 'avaiable':
+            domain.append(('forwarder_id','=',False))            
+
 
         thong_ke = []
         for nv in user_ids:
@@ -41,6 +49,7 @@ class GiaoNhanModule(http.Controller):
             'page': post.get('page', 1),
             'error': post.get('error', False),
             'success': post.get('success', False),
+            'filter_d': filter_d,
         })
 
 
@@ -48,7 +57,7 @@ class GiaoNhanModule(http.Controller):
     def gan_giao_nhan(self, **post):
         try:
             if not http.request.env.user:
-                return http.request.redirect("/web/login")
+                return http.request.redirect("/web/login?redirect=giao_nhan")
 
             Models = http.request.env['sky.forwarder']
 
@@ -78,14 +87,14 @@ class GiaoNhanModule(http.Controller):
     def ghichu(self, **post):
 
         if not http.request.env.user:
-            return http.request.redirect("/web/login")
+            return http.request.redirect("/web/login?redirect=giao_nhan")
 
-        if post.get('comment', False):
-            Models = http.request.env['sky.forwarder']
-            res = Models.browse(int(post.get('record_id', False)))
-            res.write({
-                'note_v2': u'{}'.format(post.get('comment', '')),
-                'he_so': int(post.get('he_so', 1)),
-            })
+        # if post.get('comment', False):
+        Models = http.request.env['sky.forwarder']
+        res = Models.browse(int(post.get('record_id', False)))
+        res.write({
+            'note_v2': u'{}'.format(post.get('comment', '')),
+            'he_so': int(post.get('he_so', 1)),
+        })
 
         return http.request.redirect("/giao_nhan")
