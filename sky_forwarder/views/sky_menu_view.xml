@@ -17,6 +17,8 @@
 
     <menuitem action="action_forwarder_invoice_tree" id="menu_forwader_invoice" parent="sky_location_forwarder_root_menu" sequence="20" groups="account.group_account_user" />
 
+    <!-- <menuitem id="sky_giao_nhan_report_menu" name="Báo cáo" parent="sky_location_forwarder_root_menu" action="sky_giao_nhan_report_wizard_action" sequence="25" /> -->
+
     <menuitem id="sky_location_config_menu" parent="sky_location_root_menu" name="Configuration" sequence="30" />
 
     <menuitem id="sky_location_config_location_menu_start" parent="sky_location_config_menu" action="action_sky_location_start" sequence="10" />

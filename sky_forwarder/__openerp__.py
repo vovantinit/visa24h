@@ -35,6 +35,7 @@
         'data/data.xml',
         'security/ir.model.access.csv',
         'wizard/create_multi_payment_view.xml',
+        'wizard/bao_cao_giao_nhan_view.xml',
         'views/sky_forwarder_view.xml',
         'views/website_template.xml',
         'views/sky_account_invoice_view.xml',

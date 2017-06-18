@@ -17,4 +17,5 @@
 #
 #/#############################################################################
 import create_multi_payment
+import bao_cao_giao_nhan
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
