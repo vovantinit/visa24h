@@ -101,7 +101,8 @@ class GiaoNhanModule(http.Controller):
         # domain = [('forwarder_id', 'in', (False, http.request.env.user.id))]
 
         # Chi xem hom nay, hom qua va hom kia
-        domain = ['|', ('state', 'in', ('new', 'set_forwarder')), 
+        domain = [('state', '!=', 'cancel'),
+                    '|', ('state', 'in', ('new', 'set_forwarder')), 
                         '&', ('s_date', '>=', str(date.today())), 
                         ('s_date', '<', str(date.today() + timedelta(days=3)))]
 
