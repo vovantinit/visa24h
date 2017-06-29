@@ -10,6 +10,7 @@
         """,
     'data': [
         'sky_so_report_wizard_view.xml',
+        'so_cai_tk_view.xml',
     ],
     'depends' : ['sky_company_currency'],
     'qweb': [],

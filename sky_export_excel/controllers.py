@@ -25,13 +25,17 @@ from collections import deque
 from datetime import datetime, timedelta
 from dateutil import tz
 
+import SimpleHTTPServer
+
 try:
     import xlwt
 except ImportError:
     xlwt = None
 from xlwt import *
 
-class AdvanceExport(http.Controller):
+import xlsxwriter
+
+class AdvanceExport(http.Controller, SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def tgl_write_excel(self, worksheet, rows, col, value, so_style_v2=None):
         if so_style_v2:
@@ -382,4 +386,3 @@ class AdvanceExport(http.Controller):
         workbook.save(response.stream)
         return response
 
-        

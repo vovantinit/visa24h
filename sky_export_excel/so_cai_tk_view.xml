@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="to_so_cai_tai_khoan_s03b_dn_form" model="ir.ui.view">
+        <field name="model">to.so.cai.tk.s03b.dn</field>
+        <field name="inherit_id" ref="to_vn_legal_financial_reports.to_so_cai_tai_khoan_s03b_dn_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='check_report']" position="after">
+                <button name="check_report_xls" string="Xuất Exel" type="object" /> or
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>
