@@ -7,7 +7,17 @@
         <field name="inherit_id" ref="to_vn_legal_financial_reports.to_so_cai_tai_khoan_s03b_dn_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//button[@name='check_report']" position="after">
-                <button name="check_report_xls" string="Xuất Exel" type="object" /> or
+                <button name="check_report" context="{'print_excel': 1}" string="Xuất Exel" type="object" /> or
+            </xpath>
+        </field>
+    </record>
+
+    <record id="to_so_quy_tien_mat_s07_dn_form" model="ir.ui.view">
+        <field name="model">to.cash.book.s07dn</field>
+        <field name="inherit_id" ref="to_vn_legal_financial_reports.to_so_quy_tien_mat_s07_dn_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='check_report']" position="after">
+                <button name="check_report" context="{'print_excel': 1}" string="Xuất Exel" type="object" /> or
             </xpath>
         </field>
     </record>
