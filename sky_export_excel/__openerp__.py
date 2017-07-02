@@ -12,7 +12,7 @@
         'sky_so_report_wizard_view.xml',
         'so_cai_tk_view.xml',
     ],
-    'depends' : ['sky_company_currency'],
+    'depends' : ['sky_company_currency', 'to_vn_legal_financial_reports'],
     'qweb': [],
     'installable': True,
     'auto_install': False,
