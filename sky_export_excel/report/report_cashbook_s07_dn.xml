@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="report_cashbook_s07_dn">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<div class="header">
+						<div class="row">
+							<t t-call="to_vn_legal_financial_reports.to_report_company_info" />
+							<div class="col-xs-5 text-center">
+								<p t-if="data['form']['to_decision'] == 'tt200'">
+									<strong>Mẫu S07-DN</strong>
+									<br />
+									(Ban hành theo TT số 200/2014/TT-BTC
+									<br />
+									Ngày 22/12/2014 của Bộ tài chính)
+								</p>
+								<p t-if="data['form']['to_decision'] == 'qd48'">
+									<strong>Mẫu S05a-DNN</strong>
+									<br />
+									(Ban hành theo QĐ số 48/2006/QĐ-BTC
+									<br />
+									Ngày 14/09/2006 của Bộ trưởng BTC)
+								</p>
+								<p t-if="data['form']['to_decision'] == 'qd15'">
+									<strong>Mẫu S07-DN</strong>
+									<br />
+									(Ban hành theo QĐ số 15/2006/QĐ-BTC
+									<br />
+									Ngày 20/03/2006 của Bộ trưởng BTC)
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="page">
+						<t t-set="opening_balance" t-value="o.get_report_opening_balance(data)"/>
+						<div class="text-center">
+							<h2>SỔ QUỸ</h2>
+							<strong>
+								Tài khoản:
+								<span t-esc="o.code" />
+								-
+								<span t-esc="o.name" />
+							</strong>
+							<p t-if="data['form']['filter'] == 'filter_date'">
+								Từ ngày:
+								<span t-esc="rml_parser.formatLang(report._get_start_date(data), date=True)" />
+								- Đến ngày:
+								<span t-esc="rml_parser.formatLang(report._get_end_date(data), date=True)" />
+							</p>
+							<p t-if="data['form']['filter'] == 'filter_period'">
+								Từ:
+								<span t-esc="report._get_start_period(data)" />
+								- Đến:
+								<span t-esc="report._get_end_period(data)" />
+							</p>
+							<p t-if="data['form']['filter'] == 'filter_no' and data['form']['fiscalyear_id']">
+								Năm tài chính: <span t-esc="report._get_fiscalyear(data)"/>
+							</p>
+						</div>
+						<div class="text-right">
+							Đơn vị tính:
+							<span t-esc="res_company.currency_id.name" />
+						</div>
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>
+										<div class="text-center">Ngày chứng từ</div>
+									</th>
+									<th>
+										<div class="text-center">Số phiếu thu</div>
+									</th>
+									<th>
+										<div class="text-center">Số phiếu chi</div>
+									</th>
+									<th>
+										<div class="text-center">Diễn giải</div>
+									</th>
+									<th>
+										<div class="text-center">Số phát sinh Nợ NT</div>
+									</th>
+									<th>
+										<div class="text-center">Số phát sinh Nợ</div>
+									</th>
+									<th>
+										<div class="text-center">Số phát sinh Có NT</div>
+									</th>
+									<th>
+										<div class="text-center">Số phát sinh Có</div>
+									</th>
+									<th>
+										<div class="text-center">Số tồn NT</div>
+									</th>
+									<th>
+										<div class="text-center">Người nhận/ Người nộp</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><strong>- Số dư đầu kỳ:</strong></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><div class="text-right"><strong><span t-esc="rml_parser.formatLang(abs(opening_balance))" /></strong></div></td>
+									<td></td>
+								</tr>
+								<t t-foreach="o.get_report_children_account()" t-as="a">
+									<tr t-foreach="a.get_report_move_lines(data)" t-as="line">
+										<td>
+											<div class="text-center">
+												<span t-esc="rml_parser.formatLang(line['ldate'], date=True)" />
+											</div>
+										</td>
+										<td>
+											<t t-if="line['debit'] &gt; 0" >
+												<span t-esc="line['mname']" />
+											</t>
+										</td>
+										<td>
+											<t t-if="line['credit'] &gt; 0" >
+												<span t-esc="line['mname']" />
+											</t>
+										</td>
+										<td>
+											<div>
+												<span t-esc="line['lref']" />
+											</div>
+										</td>
+										<td>
+											<t t-if="line['debit'] &gt; 0" >
+												<div class="text-right">
+													<span t-esc="rml_parser.formatLang(abs(line['amount_currency']))" />
+												</div>
+											</t>
+										</td>
+										<td>
+											<div class="text-right">
+												<span t-esc="rml_parser.formatLang(line['debit'])" />
+											</div>
+										</td>
+										<td>
+											<t t-if="line['credit'] &gt; 0" >
+												<div class="text-right">
+													<span t-esc="rml_parser.formatLang(abs(line['amount_currency']))" />
+												</div>
+											</t>
+										</td>
+										<td>
+											<div class="text-right">
+												<span t-esc="rml_parser.formatLang(line['credit'])" />
+											</div>
+										</td>
+										<td>
+											<span t-esc="line['partner_name']" />
+										</td>
+										<!-- <td>
+											<span t-esc="line['partner_name']" />
+										</td> -->
+										<td>
+											<span t-esc="line['move_narration']" />
+										</td>
+										
+										<td>
+											<div class="text-right">
+												<span t-esc="rml_parser.formatLang(line['progress'])" />
+											</div>
+										</td>
+									</tr>
+								</t>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><strong>- Cộng phát sinh trong kỳ</strong></td>
+									<td>
+										<strong><span class="pull-right" t-esc="rml_parser.formatLang(o.get_report_sum_debit(data))" /></strong>
+									</td>
+									<td>
+										<strong><span class="pull-right" t-esc="rml_parser.formatLang(o.get_report_sum_credit(data))" /></strong>
+									</td>
+									<td></td>
+								</tr>
+								<t t-set="sum_balance" t-value="o.get_report_sum_balance(data)"/>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><strong>- Số dư cuối kỳ</strong></td>
+									<td></td>
+									<td></td>
+									<td><div class="text-right"><strong><span t-esc="rml_parser.formatLang(abs(sum_balance))" /></strong></div></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="row">
+							<div class="col-xs-3 col-xs-offset-9">
+								<span class="text-center">Lập, ngày ..... tháng ..... năm ......</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4">
+								<p class="text-center">
+									<strong>
+										Người ghi sổ
+									</strong>
+									<br />
+									(Ký, họ tên)
+								</p>
+							</div>
+							<div class="col-xs-4">
+								<p class="text-center">
+									<strong>
+										Kế toán trưởng
+									</strong>
+									<br />
+									(Ký, họ tên)
+								</p>
+							</div>
+							<div class="col-xs-4">
+								<p class="text-center">
+									<strong>
+										Giám đốc
+									</strong>
+									<br />
+									(Ký, họ tên, đóng dấu)
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="footer">
+						<div class="text-center">
+							<ul class="list-inline">
+								<li>Page:</li>
+								<li>
+									<span class="page" />
+								</li>
+								<li>/</li>
+								<li>
+									<span class="topage" />
+								</li>
+							</ul>
+						</div>
+					</div>
+				</t>
+			</t>
+		</template>
+
+		<report auto="False" id="to_cash_book_s07_dn" menu="False"
+			model="to.cash.book.s07dn" name="sky_export_excel.report_cashbook_s07_dn"
+			file="sky_export_excel.report_cashbook_s07_dn" report_type="qweb-pdf"
+			string="Cash book (S07-DN)" />
+
+	</data>
+</openerp>

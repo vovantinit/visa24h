@@ -21,9 +21,10 @@ def tgl_check_report_xls(self, data, account):
     f_align_left    = {'align':'left'}
     f_align_right   = {'align':'right'}
     f_align_center  = {'align':'center'}
+    f_wrap    = {'text_wrap': True}
     f_num_format    = {'num_format': '#,##0.00'}
     f_background    = {'bg_color': '#f5f5f5'}
-
+    
 
     header_value = [
         {
@@ -109,7 +110,7 @@ def tgl_check_report_xls(self, data, account):
         },
     ]
 
-    rows = 4
+    rows = 0
     amount_currency = 0
 
     currency_obj = self.env['res.currency']
@@ -159,6 +160,7 @@ def tgl_check_report_xls(self, data, account):
         
         p_id = Payment.search([('move_ids','in',line['lid'])], limit=1)
         line['partner_v2'] = p_id and p_id.recipient_payer or line['partner']
+        line['move_narration'] = p_id and p_id.reference or line['move_narration']
 
         rows += 1            
         for index, val in enumerate(header_value):
@@ -221,8 +223,9 @@ class to_cash_book_s07_dn(models.Model):
 
     @api.multi
     def _print_report(self, data):
+        data = self.pre_print_report(data)
         if self._context.get('print_excel', False):
-            data = self.pre_print_report(data)
             return self.check_report_xls(data)
         else:
             return super(to_cash_book_s07_dn, self)._print_report(data)
+            # return self.env['report'].with_context(landscape=True).get_action(self, 'sky_export_excel.report_cashbook_s07_dn', data=data)
