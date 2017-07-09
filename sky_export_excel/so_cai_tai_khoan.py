@@ -2,6 +2,7 @@
 from openerp import api, fields, models
 from cStringIO import StringIO
 import xlsxwriter
+from datetime import datetime
 
 def merge_dicts(*dict_args):
     result = {}
@@ -54,7 +55,7 @@ def tgl_check_report_xls(self, data, account):
         {
             'label': u'Diễn giải',
             'size': 30,
-            'field_name': 'move_narration',
+            'field_name': 'lref',
         },
         {
             'label': u'TK\nđối ứng',
@@ -157,10 +158,10 @@ def tgl_check_report_xls(self, data, account):
             line['progress_v2'] = self[account].get_current_balance(data['form']['date_from'], line['ldate'], data, self.target_move)
             line['amount_currency_sum'] = from_currency.with_context(date=line['ldate']).compute(line['progress_v2'], to_currency, round=True)
             # self.cash_account.get_current_balance_nt(data['form']['date_from'], line['ldate'], data, self.target_move)
-        
+        line['ldate'] = datetime.strptime(line['ldate'], '%Y-%m-%d').strftime('%d/%m/%Y')
         p_id = Payment.search([('move_ids','in',line['lid'])], limit=1)
         line['partner_v2'] = p_id and p_id.recipient_payer or line['partner']
-        line['move_narration'] = p_id and p_id.reference or line['move_narration']
+        # line['move_narration'] = p_id and p_id.reference or line['move_narration']
 
         rows += 1            
         for index, val in enumerate(header_value):
