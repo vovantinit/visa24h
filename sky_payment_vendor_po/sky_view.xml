@@ -12,9 +12,11 @@
             </xpath>
             <field name="line_dr_ids" position="before" >
                 <button name="sky_uncheck_line_dr_ids" states="draft" string="Bỏ chọn" type="object" />
+                <button name="sky_del_line_dr_ids" states="draft" string="Xoá dòng không chọn" type="object" class="oe_edit_only" />
             </field>
             <field name="line_cr_ids" position="before" >
                 <button name="sky_uncheck_line_cr_ids" states="draft" string="Bỏ chọn" type="object" />
+                <button name="sky_del_line_cr_ids" states="draft" string="Xoá dòng không chọn" type="object" class="oe_edit_only" />
             </field>
         </field>
     </record>
@@ -26,9 +28,11 @@
         <field name="arch" type="xml">
             <field name="line_dr_ids" position="before" >
                 <button name="sky_uncheck_line_dr_ids" states="draft" string="Bỏ chọn" type="object" />
+                <button name="sky_del_line_dr_ids" states="draft" string="Xoá dòng không chọn" type="object" class="oe_edit_only" />
             </field>
             <field name="line_cr_ids" position="before" >
                 <button name="sky_uncheck_line_cr_ids" states="draft" string="Bỏ chọn" type="object" />
+                <button name="sky_del_line_cr_ids" states="draft" string="Xoá dòng không chọn" type="object" class="oe_edit_only" />
             </field>
         </field>
     </record>

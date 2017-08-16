@@ -43,10 +43,21 @@ class AccountVoucher(models.Model):
     def sky_uncheck_line_dr_ids(self):
         self.mapped('line_dr_ids').write({
             'reconcile': False,
+            'amount': 0,
         })
+
+    @api.multi
+    def sky_del_line_dr_ids(self):
+        self.mapped('line_dr_ids').filtered(lambda r: not r.reconcile).unlink()
 
     @api.multi
     def sky_uncheck_line_cr_ids(self):
         self.mapped('line_cr_ids').write({
             'reconcile': False,
+            'amount': 0,
+
         })
+
+    @api.multi
+    def sky_del_line_cr_ids(self):
+        self.mapped('line_cr_ids').filtered(lambda r: not r.reconcile).unlink()
