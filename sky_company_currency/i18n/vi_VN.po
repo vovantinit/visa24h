@@ -1,0 +1,134 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * sky_company_currency
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-26 20:38+0000\n"
+"PO-Revision-Date: 2016-08-26 20:38+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sky_company_currency
+#: view:account.invoice:sky_company_currency.invoice_form_inherit
+#: view:account.invoice:sky_company_currency.invoice_supplier_form_inherit
+#: view:sale.order:sky_company_currency.view_order_form_inherit
+msgid "(update)"
+msgstr "(cập nhật)"
+
+#. module: sky_company_currency
+#: view:sale.order:sky_company_currency.view_order_tree_inherit
+msgid "Analyctic Purchase"
+msgstr "Tổng chi phí"
+
+#. module: sky_company_currency
+#: view:sale.order:sky_company_currency.view_order_tree_inherit
+msgid "Analytic Sales"
+msgstr "Tổng doanh thu"
+
+#. module: sky_company_currency
+#: field:account.invoice,exchange_rate:0
+#: field:sale.order,exchange_rate:0
+msgid "Exchange rate (VND)"
+msgstr "Tỷ giá (VND)"
+
+#. module: sky_company_currency
+#: view:website:account.report_invoice_document
+#: view:website:sale.report_saleorder_document
+msgid "Exchange rate (VND):"
+msgstr "Tỷ giá (VND):"
+
+#. module: sky_company_currency
+#: model:ir.model,name:sky_company_currency.model_account_invoice
+msgid "Invoice"
+msgstr "Hóa đơn"
+
+#. module: sky_company_currency
+#: model:ir.model,name:sky_company_currency.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Chi tiết hóa đơn"
+
+#. module: sky_company_currency
+#: field:account.invoice,main_currency_id:0
+#: field:sale.order,main_currency_id:0
+msgid "Main Currency"
+msgstr "Main Currency"
+
+#. module: sky_company_currency
+#: view:sale.order:sky_company_currency.view_sales_order_filter_inherit
+#: field:sale.order,product_product_id:0
+msgid "Product"
+msgstr "Sản phẩm"
+
+#. module: sky_company_currency
+#: view:sale.order:sky_company_currency.view_sales_order_filter_inherit
+msgid "Product Category"
+msgstr "Loại sản phẩm"
+
+#. module: sky_company_currency
+#: view:account.invoice:sky_company_currency.invoice_form_inherit
+#: view:account.invoice:sky_company_currency.invoice_supplier_form_inherit
+msgid "Recompute taxes and total"
+msgstr "Tính toán lại thuế và tổng tiền"
+
+#. module: sky_company_currency
+#: model:ir.model,name:sky_company_currency.model_sale_order
+msgid "Sales Order"
+msgstr "Đơn hàng"
+
+#. module: sky_company_currency
+#: model:ir.model,name:sky_company_currency.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Dòng hàng Đơn hàng bán"
+
+#. module: sky_company_currency
+#: model:ir.model,name:sky_company_currency.model_crm_case_section
+msgid "Sales Teams"
+msgstr "Đội bán hàng"
+
+#. module: sky_company_currency
+#: field:sale.order,show_vnd_footer:0
+msgid "Show Footer (VND)"
+msgstr "Show Footer (VND)"
+
+#. module: sky_company_currency
+#: field:account.invoice,vnd_amount_tax:0
+#: field:sale.order,vnd_amount_tax:0
+msgid "Taxes (VND)"
+msgstr "Thuế (VND)"
+
+#. module: sky_company_currency
+#: field:account.invoice,vnd_amount_total:0
+#: field:sale.order,vnd_amount_total:0
+msgid "Total (VND)"
+msgstr "Tổng (VND)"
+
+#. module: sky_company_currency
+#: view:sale.order:sky_company_currency.view_order_tree_inherit
+msgid "Total Tax"
+msgstr "Tổng Thuế (VND)"
+
+#. module: sky_company_currency
+#: view:account.invoice:sky_company_currency.invoice_tree
+#: view:sale.order:sky_company_currency.view_order_tree_inherit
+#: view:sale.order:sky_company_currency.view_quotation_tree_inherit
+msgid "Total Tax Included (VND)"
+msgstr "Tổng tiền trước thuế (VND)"
+
+#. module: sky_company_currency
+#: field:account.invoice,vnd_amount_untaxed:0
+#: field:sale.order,vnd_amount_untaxed:0
+msgid "Untaxed Amount (VND)"
+msgstr "Thuế (VND)"
+
+#. module: sky_company_currency
+#: view:website:account.report_invoice_document
+#: view:website:sale.report_saleorder_document
+msgid "col-xs-5 pull-right"
+msgstr "col-xs-5 pull-right"

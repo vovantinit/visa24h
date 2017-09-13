@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="view_sky_sale_wage_graph" model="ir.ui.view">
+         <field name="name">sky.sale.report.graph</field>
+         <field name="model">sale.report</field>
+         <field name="arch" type="xml">
+             <graph string="Sales Analysis" type="pivot" stacked="True">
+                 <field name="block" type="col" />
+                 <field name="x_ngaytinhdoanhso" type="col" interval="month" />
+                 <field name="section_id" type="row"/>
+                 <field name="user_id" type="row"/>
+                 <field name="acc_analytic_balance" type="measure"/>
+                 <field name="sale_wage" type="measure"/>
+             </graph>
+         </field>
+    </record>
+
+    <record id="action_sky_view_sky_sale_wage" model="ir.actions.act_window">
+        <field name="name">Lương doanh số</field>
+        <field name="res_model">sale.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_sky_sale_wage_graph"></field>
+        <field name="context">{'close_so': 1}</field>
+    </record>
+
+    <menuitem id="menu_sky_view_sale_wage_for_period" parent="base.menu_sales" sequence="10"
+            groups="purchase.group_purchase_manager" action="action_sky_view_sky_sale_wage" />
+
+</data>
+</openerp>

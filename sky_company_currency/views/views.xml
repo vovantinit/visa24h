@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+
+    <!-- Add Total (VND) to tree of Sale Order -->
+    <record id="view_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree" />
+        <field name="arch" type="xml">            
+            <field name="amount_total" position="after">
+                <field name="sky_compute" invisible="1" />
+                <field name="x_blank"/>
+                <field name="vnd_amount_total" sum="Total Tax Included (VND)" />
+                <field name="x_blank"/>
+                <field name="vnd_amount_tax" sum="Total Tax" />
+            </field>
+            <xpath expr="//tree" position="inside">
+                <field name="x_blank"/>
+                <field name="customer_residual" />
+                <field name="x_blank"/>
+                <field name="acc_analytic_debit" sum="Analytic Sales" />
+                <field name="x_blank"/>
+                <field name="acc_analytic_credit" sum="Analyctic Purchase" />
+                <field name="x_blank"/>
+                <field name="acc_analytic_balance" sum="Analyctic Balance" />
+            </xpath>
+            <field name="acc_analytic_balance" position="after" >
+                <field name="acc_analytic_gm" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_inherit" model="ir.ui.view">
+        <field name="name">sale.order.list.select</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Product Category" domain="[]" context="{'group_by':'product_category_id'}"/>
+                <filter string="Product" domain="[]" context="{'group_by':'product_product_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Add Total (VND) to tree of Quotation -->
+    <record id="view_quotation_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree" />
+        <field name="arch" type="xml">            
+            <field name="amount_total" position="after">
+                <field name="sky_compute" invisible="1" />
+                <field name="vnd_amount_total" sum="Total Tax Included (VND)" />
+            </field>
+        </field>
+    </record>
+
+    
+    <!-- Add Total (VND), Price Subtotal (VND) to form of Sale Order -->
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">            
+            <field name="pricelist_id" position="after">
+                <field name="sky_compute" invisible="1" />
+                <field name="show_vnd_footer" invisible="1" />
+                <field name="exchange_rate" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"/>
+            </field>
+            <field name="price_subtotal" position="after">
+                <field name="show_vnd_footer" invisible="1" />
+                <field name="vnd_price_subtotal" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"/>
+            </field>
+            <group name="sale_total" position="replace">
+                <group class="oe_subtotal_footer oe_right" style="width: 45% !important;" name="sale_total" colspan="2">
+                    <group>
+                        <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="amount_total"/>
+                            <button name="button_dummy" states="draft,sent,progress,manual" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                        </div>
+                        <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="show_vnd_footer" invisible="1" />
+                        <field name="main_currency_id" invisible="1" />
+                    </group>
+
+                    <group class="oe_right" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"  >
+                        <field name="vnd_amount_untaxed" nolabel="1"  colspan="2" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                        <field name="vnd_amount_tax" nolabel="1" colspan="2" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                        <field name="vnd_amount_total" nolabel="1"  class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                    </group>
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <!--  -->
+    <record id="invoice_tree" model="ir.ui.view">
+        <field name="name">account.invoice.tree.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="amount_total" position="after">
+                <field name="vnd_amount_total" sum="Total Tax Included (VND)" />
+            </field>
+        </field>
+    </record>
+
+    <!-- Supplier From -->
+    <record id="invoice_supplier_form_inherit" model="ir.ui.view">
+        <field name="name">account.invoice.supplier.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <field name="show_vnd_footer" invisible="1" />
+                <field name="exchange_rate" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"  />
+            </field>
+            <field name="price_subtotal" position="after">
+                <field name="show_vnd_footer" invisible="1" />
+                <field name="vnd_price_subtotal" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"  />
+            </field>
+            <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="replace">
+                <group class="oe_subtotal_footer oe_right" style="width: 45% !important;">
+                    <group>
+                        <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <div>
+                            <label for="amount_tax"/>
+                            <button name="button_reset_taxes" states="draft,proforma2"
+                                string="(update)" class="oe_link oe_edit_only"
+                                type="object" help="Recompute taxes and total"/>
+                        </div>
+                        <field name="amount_tax" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+                        <field name="residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="reconciled" invisible="1"/>
+                        <field name="main_currency_id" invisible="1" />
+                        <field name="show_vnd_footer" invisible="1" />
+                    </group>
+                    <group class="oe_right" attrs="{'invisible': [('show_vnd_footer', '=', False)]}" >
+                        <field name="vnd_amount_untaxed" nolabel="1"  colspan="2" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                        <field name="vnd_amount_tax" nolabel="1" colspan="2" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                        <field name="vnd_amount_total" nolabel="1"  class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Customer From -->
+    
+    <record id="invoice_form_inherit" model="ir.ui.view">
+        <field name="name">account.invoice.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']/.." position="after">
+                <field name="show_vnd_footer" invisible="1" />
+                <field name="exchange_rate" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"  />
+            </xpath>
+            <xpath expr="//page[@string='Invoice Lines']/field[@name='invoice_line']/tree/field[@name='price_subtotal']" position="after">
+                <field name="show_vnd_footer" invisible="1" />
+                <field name="vnd_price_subtotal" attrs="{'invisible': [('show_vnd_footer', '=', False)]}"  />
+            </xpath>
+            <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="replace">
+                <group class="oe_subtotal_footer oe_right" style="width: 45% !important;">
+                    <group>
+                        <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <div>
+                            <label for="amount_tax"/>
+                            <button name="button_reset_taxes" states="draft,proforma2"
+                                string="(update)" class="oe_link oe_edit_only"
+                                type="object" help="Recompute taxes and total"/>
+                        </div>
+                        <field name="amount_tax" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+                        <field name="residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="reconciled" invisible="1"/>
+                        <field name="main_currency_id" invisible="1" />
+                        <field name="show_vnd_footer" invisible="1" />
+                    </group>
+                    <group class="oe_right" attrs="{'invisible': [('show_vnd_footer', '=', False)]}" >
+                        <field name="vnd_amount_untaxed" nolabel="1"  colspan="2" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                        <field name="vnd_amount_tax" nolabel="1" colspan="2" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                        <field name="vnd_amount_total" nolabel="1"  class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'main_currency_id'}" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>

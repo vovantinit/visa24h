@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document" >
+
+        <xpath expr="//div[@class='col-xs-4 pull-right']//span[@t-field='o.amount_untaxed']/.." position="after">
+            <td t-if="o.show_vnd_footer" class="text-right">
+                <span t-field="o.vnd_amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.main_currency_id"}'/>
+            </td>
+        </xpath>
+
+        <xpath expr="//div[@class='col-xs-4 pull-right']//span[@t-field='o.amount_tax']/.." position="after">
+            <td t-if="o.show_vnd_footer" class="text-right">
+                <span t-field="o.vnd_amount_tax" t-field-options='{"widget": "monetary", "display_currency": "o.main_currency_id"}'/>
+            </td>
+        </xpath>
+
+        <xpath expr="//div[@class='col-xs-4 pull-right']//span[@t-field='o.amount_total']/.." position="after">
+            <td t-if="o.show_vnd_footer" class="text-right">
+                <span t-field="o.vnd_amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.main_currency_id"}'/>
+            </td>
+        </xpath>
+
+        <xpath expr="//div[@class='col-xs-4 pull-right']" position="attributes" >
+            <attribute name="class">col-xs-5 pull-right</attribute>
+        </xpath>
+
+        <xpath expr="//p[@t-field='o.note']" position="before" >
+            <t t-if="o.show_vnd_footer" >
+                <strong>Exchange rate (VND):</strong>
+                <span t-field="o.exchange_rate"/>
+            </t>
+        </xpath>
+
+    </template>
+
+</data>
+</openerp>

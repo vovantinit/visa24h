@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="sky_crm_case_section_view_form" model="ir.ui.view">
+        <field name="name">sky.crm.case.section.form</field>
+        <field name="model">crm.case.section</field>
+        <field name="inherit_id" ref="crm.sales_team_form_view_in_crm" />
+        <field name="arch" type="xml">
+            <field name="alias_contact" position="after" >
+                <separator string="Bảng lương doanh số" name="sale_wage_for" colspan="2" />
+                <field name="wage_for_manager_id" groups="purchase.group_purchase_manager" context="{'no_quick_create': True, 'no_create_edit': True}" />
+                <field name="wage_for_saleperson_id" groups="purchase.group_purchase_manager" context="{'no_quick_create': True, 'no_create_edit': True}" />
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sky_sale_wage_form">
+        <field name="name">sky.sale.wage.form</field>
+        <field name="model">sky.sale.wage</field>
+        <field name="arch" type="xml">
+            <form string="Sale wage">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page name="Wage lines">
+                            <field name="line_ids" >
+                                <tree edit="1" editable="bottom" >
+                                    <field name="wage_from" /> 
+                                    <field name="wage_to" />
+                                    <field name="wage_value" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sky_sale_wage" model="ir.actions.act_window">
+        <field name="name">Công thức tính lương doanh số</field>
+        <field name="res_model">sky.sale.wage</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="sky_sale_wage_menu" action="action_sky_sale_wage" sequence="30" parent="base.menu_crm_config_lead" groups="base.group_no_one"/>
+
+</data>
+</openerp>

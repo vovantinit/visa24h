@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="sky_company_currency assets" inherit_id="web_graph.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/sky_company_currency/static/src/js/main2.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>

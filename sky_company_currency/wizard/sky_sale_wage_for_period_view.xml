@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="sky_view_sale_wage_for_period_form">
+        <field name="name">sky_view_sale_wage_for_period.form</field>
+        <field name="model">sky.open.sale.wage</field>
+        <field name="arch" type="xml">
+            <form string="Bảng lương doanh số theo tháng">
+                <group>
+                    <group>
+                        <field name="period_from"/>
+                        <field name="period_to"/>
+                    </group>
+                    <group>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_view" string="Xem" type="object" class="oe_highlight" />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sky_view_sale_wage_for_period" model="ir.actions.act_window">
+            <field name="name">Bảng lương doanh số theo tháng</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sky.open.sale.wage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sky_view_sale_wage_for_period_form" />
+            <field name="target">new</field>
+        </record>
+
+        <!-- <menuitem id="menu_sky_view_sale_wage_for_period" parent="base.menu_sales" sequence="10"
+            groups="purchase.group_purchase_manager" action="action_sky_view_sale_wage_for_period" /> -->
+
+</data>
+</openerp>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+    
+    <t t-name="SearchWithPeriod">
+        <div  style="margin-left: 20px; margin-top: 10px;">
+            <div class="oe_form_dropdown_section" style="float: left;">
+                <h4 style="float: left;">Lọc ngày tính doanh số        Từ :</h4> 
+                <select class="oe_account_select_period_from">
+                    
+                </select>
+            </div>
+            <div class="oe_form_dropdown_section" style=" margin-left: 10px;">
+                <h4 style="float: left;">Đến :</h4> 
+                <select class="oe_account_select_period_to" >
+                    
+                </select>
+            </div>
+
+        </div>
+    </t>
+
+</templates>
