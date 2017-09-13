@@ -195,5 +195,37 @@
         </field>
     </record>
 
+    <!-- Them Gause chart: Don hang hoan thanh -->
+    
+    <record id="crm_case_section_salesteams_view_kanban_v2" model="ir.ui.view">
+        <field name="name">sky.crm.case.section.kanban.v2</field>
+        <field name="model">crm.case.section</field>
+        <field name="inherit_id" ref="sale.crm_case_section_salesteams_view_kanban" />
+        <field name="groups_id" eval="[(6, 0, [ref('account.group_account_manager')])]" />
+        <field name="arch" type="xml">            
+            <field name="invoiced_target" position="after" >
+                <field name="monthly_order_done"/>                
+            </field>
+            <xpath expr="//div[@t-if='record.invoiced_target.raw_value']" position="inside" >
+                <field name="monthly_order_done" widget="gauge" style="width:160px; height: 120px; cursor: pointer;" options="{'max_field': 'invoiced_target', 'on_change': 'action_forecast'}">Hoàn thành</field>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Them so nhat ky vao doi ban hang -->
+    <record id="crm_case_section_view_form_v2" model="ir.ui.view">
+        <field name="name">sky.crm.case.section.form.v2</field>
+        <field name="model">crm.case.section</field>
+        <field name="inherit_id" ref="sales_team.crm_case_section_view_form" />
+        <field name="groups_id" eval="[(6, 0, [ref('account.group_account_manager')])]" />
+        <field name="arch" type="xml">            
+            <xpath expr="//notebook" position="inside">
+                <page string="Sổ nhật ký">
+                    <field name="payment_method_ids" />
+                </page>
+           </xpath>
+        </field>
+    </record>
+
 </data>
 </openerp>

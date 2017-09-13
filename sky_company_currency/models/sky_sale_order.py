@@ -118,6 +118,7 @@ class SaleOrder(models.Model):
                         #customer_residual += invoice.currency_id.with_context(date=invoice.date_invoice or invoice.create_date).compute(invoice.residual, invoice.main_currency_id, round=True)
                         customer_residual = invoice.payment_ids and abs(invoice.payment_ids[0].amount_residual) or 0
                         break
+            # if not record.customer_residual or customer_residual != record.customer_residual:
             if customer_residual != (record.customer_residual or 0):
                 vals.update({'customer_residual': customer_residual})
             record.sky_compute = ''
@@ -153,12 +154,5 @@ class SaleOrder(models.Model):
     )
 
 SaleOrder()
-
-class ResUsers(models.Model):
-    _inherit = 'res.users'
-
-    team_ids = fields.Many2many('crm.case.section', 'sale_member_rel', 'member_id', 'section_id', 'Teams')
-    manager_team_ids = fields.One2many('crm.case.section',  'user_id', string='Teams manager')
-ResUsers()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
