@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- <t t-extend="ListView.buttons">
+        <t t-jquery=".oe_list_buttons" t-operation="append">
+            <i class="fa fa-search tgl_quick_search" style="cursor: pointer; margin-left: 5px;" aria-hidden="true"></i>
+        </t>
+    </t> -->
+    <t t-name="SkyERP.buttons">
+        <div class="sky-search btn-group btn-group-sm" style="width: 180%;">
+            <div style="margin-left: 0px; margin-top: 2px; padding-right: 10px;">
+                <span style="float: left;">
+                  
+                    <select class="sky_select_field form-control" style="height: 25px;" >
+                        <option t-foreach="sky_fields" t-as="field" t-att-value="field[0]">
+                            <t t-esc="field[1]"/>
+                        </option> 
+                    </select>
+                </span>
+
+                <span style="float: left; margin-left: 2px;">
+                    <input style="height: 25px;" class="sky_start_date form-control" size="10" placeholder="Start date" type="text" />
+                </span>
+
+                <span style="float: left; margin-left: 2px;">
+                    <input style="height: 25px;" class="sky_end_date form-control" size="10" placeholder="End date" type="text" />
+                </span>
+
+            </div>
+        </div>
+    </t>
+
+</templates>

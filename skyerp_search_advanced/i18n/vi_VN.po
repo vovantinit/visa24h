@@ -1,0 +1,45 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* skyerp_search_advanced
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-08 07:18+0000\n"
+"PO-Revision-Date: 2017-01-08 07:18+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: skyerp_search_advanced
+#. openerp-web
+#: code:addons/skyerp_search_advanced/static/src/xml/pivot_view.xml:21
+#, python-format
+msgid "End date"
+msgstr "Đến ngày"
+
+#. module: skyerp_search_advanced
+#. openerp-web
+#: code:addons/skyerp_search_advanced/static/src/xml/pivot_view.xml:24
+#, python-format
+msgid "Field"
+msgstr "Trường"
+
+#. module: skyerp_search_advanced
+#. openerp-web
+#: code:addons/skyerp_search_advanced/static/src/xml/pivot_view.xml:24
+#, python-format
+msgid "Search advanced"
+msgstr "Lọc"
+
+#. module: skyerp_search_advanced
+#. openerp-web
+#: code:addons/skyerp_search_advanced/static/src/xml/pivot_view.xml:17
+#, python-format
+msgid "Start date"
+msgstr "Từ ngày"
+
